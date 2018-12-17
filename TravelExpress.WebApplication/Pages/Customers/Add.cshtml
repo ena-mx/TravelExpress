@@ -1,0 +1,78 @@
+﻿@page
+@model TravelExpress.WebApplication.Pages.Customers.AddModel
+@{
+    ViewData["Title"] = Resources.Resource.CustomersAddPageTitle;
+}
+
+@if (!ModelState.IsValid)
+{
+    <div class="callout small alert position-fixed-top" data-closable>
+        <button class="close-button" aria-label="Close menu" type="button" data-close>
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h6 class="font-bold app-text-error" style="color: #cc4b37;">Error al guardar</h6>
+        <div asp-validation-summary="ModelOnly"></div>
+    </div>
+}
+
+<form class="auto cell grid-y padding-horizontal-1" method="post">
+    <div class="shrink cell padding-top-1">
+        <h3>@Entities.Resources.Resource.TitleNewCustomerPage</h3>
+    </div>
+    <div class="auto cell grid-x app-overflow-y-auto">
+        <div class="auto cell grid-y padding-right-1">
+            <div class="shrink cell">
+                <label asp-for="Customer.Name"></label>
+                <input type="text" class="form-control" asp-for="Customer.Name" placeholder="@Entities.Resources.Resource.Name_Display" autocomplete="off">
+                <span asp-validation-for="Customer.Name"></span>
+            </div>
+            <div class="shrink cell">
+                <label asp-for="Customer.FamilyName1"></label>
+                <input type="text" class="form-control" asp-for="Customer.FamilyName1" placeholder="@Entities.Resources.Resource.FamilyName1_Display" autocomplete="off">
+                <span asp-validation-for="Customer.FamilyName1"></span>
+            </div>
+            <div class="shrink cell">
+                <label asp-for="Customer.FamilyName2"></label>
+                <input type="text" class="form-control" asp-for="Customer.FamilyName2" placeholder="@Entities.Resources.Resource.FamilyName2_Display" autocomplete="off">
+                <span asp-validation-for="Customer.FamilyName2"></span>
+            </div>
+            <div class="shrink cell">
+                <label asp-for="Customer.Telephone"></label>
+                <input type="text" class="form-control" asp-for="Customer.Telephone" placeholder="@Entities.Resources.Resource.Telephone_Display" autocomplete="off">
+                <span asp-validation-for="Customer.Telephone"></span>
+            </div>
+            <div class="shrink cell">
+                <label asp-for="Customer.Cellphone"></label>
+                <input type="text" class="form-control" asp-for="Customer.Cellphone" placeholder="@Entities.Resources.Resource.Cellphone_Display" autocomplete="off">
+                <span asp-validation-for="Customer.Cellphone"></span>
+            </div>
+        </div>
+        <div class="auto cell grid-y padding-left-1">
+            <div class="shrink cell">
+                <label asp-for="Customer.Email"></label>
+                <input type="email" class="form-control" asp-for="Customer.Email" placeholder="@Entities.Resources.Resource.Email_Display" autocomplete="off">
+                <span asp-validation-for="Customer.Email"></span>
+            </div>
+            <div class="shrink cell">
+                <label asp-for="Customer.BirthDate"></label>
+                <input type="date" class="form-control" asp-for="Customer.BirthDate" placeholder="@Entities.Resources.Resource.BirthDate_Display" autocomplete="off">
+                <span asp-validation-for="Customer.BirthDate"></span>
+            </div>
+            <div class="shrink cell">
+                <input type="checkbox" asp-for="Customer.PhoneCallsEnabled" checked>
+                <label asp-for="Customer.PhoneCallsEnabled"></label>
+            </div>
+            <div class="shrink cell">
+                <input type="checkbox" asp-for="Customer.MailEnabled" checked>
+                <label asp-for="Customer.MailEnabled"></label>
+            </div>
+        </div>
+    </div>
+    <div class="shrink cell grid-x align-right">
+        <button type="submit" class="button">@Entities.Resources.Resource.AppSaveButton</button>
+    </div>
+</form>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -1,0 +1,88 @@
+﻿@page "{id:Guid}"
+@model TravelExpress.WebApplication.Pages.Customers.AddOrderModel
+@{
+    ViewData["Title"] = "AddOrder";
+}
+
+<div class="auto cell grid-y padding-horizontal-1">
+    <div class="shrink cell grid-x padding-top-1">
+        <div class="shrink cell grid-x align-left">
+            <h3 class="font-bold">Cliente - Generar Orden</h3>
+        </div>
+    </div>
+    <div class="auto cell grid-x">
+        <div class="small-12 medium-3 cell grid-y bordered app-panel-data-margin-right app-panel-data-margin-bottom">
+            <div class="shrink cell grid-y app-border-bottom padding-1">
+                <h5 class="font-bold margin-0">Información de contacto</h5>
+            </div>
+            <div class="auto cell app-overflow-y-auto">
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Nombre</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Name&nbsp;@Model.Customer.CustomerInfo.FamilyName1&nbsp;@Model.Customer.CustomerInfo.FamilyName2</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Email</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Email</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Teléfono</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Telephone</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Celular</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Cellphone</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Cumpleaños</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.BirthDate.ToString("MMMM dd")</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Fecha registro</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.RegisterDate.ToString("dd/MMMM/yyyy")</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Última fecha de actualización</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.LastUpdateDate.ToString("dd/MMMM/yyyy")</div>
+                </div>
+            </div>
+        </div>
+        <div class="auto cell grid-y">
+            <div class="auto cell grid-y bordered app-panel-data-margin-bottom">
+                <div class="shrink cell padding-horizontal-1 padding-top-1 app-border-bottom">
+                    <h2>Seleccione destino y fecha</h2>
+                </div>
+                <div class="auto cell app-overflow-y-auto">
+                    @if (Model.ProductExcursions != null && Model.ProductExcursions.Any())
+                    {
+                        <ul class="vertical menu accordion-menu" data-accordion-menu>
+                            @for (int i = 0; i < @Model.ProductExcursions.Length; i++)
+                            {
+                                <li class="app-border-bottom">
+                                    <a class="font-bold app-list-item-title" href="javascript:;">@Model.ProductExcursions[i].Description</a>
+                                    <ul class="menu vertical nested is-active">
+                                        @for (int j = 0; j < @Model.ProductExcursions[i].ExcursionDates.Length; j++)
+                                        {
+                                            <li><a asp-page="./FillOrder" asp-route-customerId="@Model.Id" asp-route-excursionId="@Model.ProductExcursions[i].ExcursionDates[j].ExcursionId">@Model.ProductExcursions[i].ExcursionDates[j].BeginDate.ToString("dd/MMMM/yyyy") al @Model.ProductExcursions[i].ExcursionDates[j].EndDate.ToString("dd/MMMM/yyyy")</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="shrink cell grid-y app-border-bottom padding-1">
+                            <div class="font-bold">No hay excursiones</div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="shrink cell grid-x align-right bordered padding-1 app-panel-data-margin-bottom">
+                <div class="app-padding-button-modal-right">
+                    <a asp-page="./Details" asp-route-id="@Model.Id" class="button margin-0">Regresar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

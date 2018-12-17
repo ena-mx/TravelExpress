@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Connector</title>
+    <link rel="stylesheet" href="~/foundation/css/foundation-prototype.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/font-awesome/css/font-awesome.min.css" asp-append-version="true" />
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body>
+    <div class="off-canvas-wrapper">
+        <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+            <div class="off-canvas position-left" id="offCanvasLeft" data-off-canvas>
+                <!-- left off-canvas markup -->
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <button class="close-button" aria-label="Close menu" type="button" data-close>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    @await Html.PartialAsync("_Menu")
+                }
+            </div>
+            <div class="off-canvas-content" data-off-canvas-content>
+                <!-- page content -->
+                <div class="grid-y grid-frame">
+                    <div class="shrink cell">
+                        @await Html.PartialAsync("_TitleBar")
+                    </div>
+                    <div class="auto cell grid-x">
+                        @RenderBody()
+                    </div>
+                    <div class="shrink cell grid-x align-center">
+                        @await Html.PartialAsync("_Footer")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/what-input/what-input.min.js" asp-append-version="true"></script>
+    <script src="~/foundation/js/foundation.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script>
+        $(document).foundation();
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

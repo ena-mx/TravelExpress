@@ -1,0 +1,28 @@
+﻿@page "{handler?}"
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+@*<div class="row">
+    <div class="col-lg-1">
+        <form asp-page-handler="edit" method="post">
+            <button class="btn btn-default">Edit</button>
+        </form>
+    </div>
+    <div class="col-lg-1">
+        <form asp-page-handler="delete" method="post">
+            <button class="btn btn-default">Delete</button>
+        </form>
+    </div>
+    <div class="col-lg-1">
+        <form asp-page-handler="view" method="post">
+            <button class="btn btn-default">View</button>
+            <input type="hidden" name="id" value="3" />
+        </form>
+    </div>
+</div>
+<h3 class="clearfix">@Model.Message</h3>*@
+
+<div class="auto cell">
+    <h1>Bienvenidos a Travel Express</h1>
+</div>

@@ -1,0 +1,17 @@
+﻿<div class="title-bar" style="background: #1B75CF;">
+    <div class="title-bar-left">
+        <button class="menu-icon" type="button" data-toggle="offCanvasLeft"></button>
+        <a class="app-bar-title" asp-page="/Index" style="color: white;">Connector</a>
+    </div>
+    <div class="title-bar-right grid-x align-right hide-for-small-only">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <label style="color: white; padding-right: 1rem;"><i class="fa fa-user fa-lg" style="padding-right: 1rem;"></i>@User.Identity.Name!</label>
+            <a asp-area="" asp-controller="Account" asp-action="SignOut" style="color: white; padding-right: 1rem;"><i class="fa fa-sign-out fa-lg"></i></a>
+        }
+        else
+        {
+            <a asp-area="" asp-controller="Account" asp-action="Signin" style="color: white; padding-right: 1rem;"><i class="fa fa-sign-out fa-lg"></i></a>
+        }
+    </div>
+</div>

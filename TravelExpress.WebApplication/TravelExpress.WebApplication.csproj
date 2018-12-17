@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>aspnet-TravelExpress.WebApplication-1F725525-AA01-4874-80A5-BECA5F0866B1</UserSecretsId>
+    <WebProject_DirectoryAccessLevelKey>1</WebProject_DirectoryAccessLevelKey>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="2.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TravelExpress.Domain.Sql\TravelExpress.Domain.Sql.csproj" />
+    <ProjectReference Include="..\TravelExpress.Entities\TravelExpress.Entities.csproj" />
+    <ProjectReference Include="..\TravelExpress.Queries.Sql\TravelExpress.Queries.Sql.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,353 @@
+﻿@page "{id:Guid}"
+@model TravelExpress.WebApplication.Pages.Catalogs.DetailsModel
+@{
+    ViewData["Title"] = "Details";
+}
+@if (!ModelState.IsValid)
+{
+    <div class="callout small alert position-fixed-top" data-closable>
+        <button class="close-button" aria-label="Close menu" type="button" data-close>
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h6 class="font-bold app-text-error" style="color: #cc4b37;">Error al guardar</h6>
+        <div asp-validation-summary="ModelOnly"></div>
+    </div>
+}
+<form method="post" class="auto cell grid-y padding-horizontal-1">
+
+    <div class="shrink cell grid-x padding-top-1">
+        <div class="shrink cell grid-x align-left">
+            <h3 class="font-bold">@Model.Product.Description</h3>
+        </div>
+        <div class="auto cell grid-x align-right">
+            <ul class="menu align-right">
+                <li>
+                    <a id="updateProductLink" href="javascript:;" data-open="updateProductModal"><i class="fa fa-pencil" style="padding-right: .5rem;"></i>Editar</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-open="priceCategoryModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>Categoría de precios</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-open="aditionalServiceModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>Servicio adicional</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-open="addExcursionModal"><i class="fa fa-calendar" style="padding-right: .5rem;"></i>Excursión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="auto cell grid-y">
+        <div class="auto cell grid-y bordered app-panel-data-margin-bottom">
+            <div class="shrink cell">
+                <ul class="tabs" data-tabs id="product-tabs">
+                    <li class="tabs-title is-active"><a class="font-bold" data-tabs-target="pricesPanel" aria-selected="true">Precios</a></li>
+                    <li class="tabs-title"><a class="font-bold" data-tabs-target="aditionalServicesPanel">Servicios Adicionales</a></li>
+                    <li class="tabs-title"><a class="font-bold" data-tabs-target="excursionsPanel">Excursiones</a></li>
+                </ul>
+            </div>
+            <div class="auto cell grid-y">
+                <div class="auto cell grid-y tabs-content" data-tabs-content="product-tabs">
+                    <div class="auto cell grid-y padding-0 tabs-panel is-active app-overflow-y-auto" id="pricesPanel">
+                        <div class="auto cell grid-y">
+                            @if (Model.Product?.PriceCategories != null && Model.Product.PriceCategories.Any())
+                            {
+                                for (int i = 0; i < Model.Product.PriceCategories.Length; i++)
+                                {
+                                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                                        <div class="grid-x">
+                                            <div class="grid-y align-center font-bold">@Model.Product.PriceCategories[i].Description</div>
+                                            <div class="grid-y align-center">
+                                                <a id="@Model.Product.PriceCategories[i].ProductPriceCategoryId" class="app-price-category-link clear button margin-0" href="javascript:;" data-open="addPriceDetailModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>Agregar detalle</a>
+                                            </div>
+                                            <div class="grid-y align-center">
+                                                <div><input type="submit" class="clear button alert margin-0" value="Eliminar" asp-route-priceCategoryId="@Model.Product.PriceCategories[i].ProductPriceCategoryId" asp-page-handler="DeletePriceCategory" /></div>
+                                            </div>
+                                        </div>
+                                        @if (Model.Product.PriceCategories[i].PriceDetails != null && Model.Product.PriceCategories[i].PriceDetails.Any())
+                                        {
+                                            <ul class="list-circle">
+                                                @for (int j = 0; j < Model.Product.PriceCategories[i].PriceDetails.Length; j++)
+                                                {
+                                                    <li>@Model.Product.PriceCategories[i].PriceDetails[j].Description&nbsp;@string.Format("{0:C}", Model.Product.PriceCategories[i].PriceDetails[j].UnitPrice)&nbsp;<div><input type="submit" class="clear button alert margin-0" value="Eliminar" asp-route-priceDetailId="@Model.Product.PriceCategories[i].PriceDetails[j].ProductPriceDetailId" asp-page-handler="DeletePriceDetail" /></div></li>
+                                                }
+                                            </ul>
+                                        }
+                                        else
+                                        {
+                                            <div class="text-wrap">Categoria sin detalles de precio</div>
+                                        }
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="shrink cell grid-y app-border-bottom padding-1">
+                                    <div class="font-bold">No hay categorias de precios</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="auto cell app-overflow-y-auto padding-0 tabs-panel" id="aditionalServicesPanel">
+                        <div class="auto cell grid-y">
+                            @if (Model.Product?.AditionalServices != null && Model.Product.AditionalServices.Any())
+                            {
+                                for (int i = 0; i < Model.Product.AditionalServices.Length; i++)
+                                {
+                                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                                        <div class="grid-x">
+                                            <div class="grid-y align-center font-bold">@Model.Product.AditionalServices[i].Description</div>
+                                            <div class="grid-y align-center">
+                                                <input type="submit" class="clear button alert margin-0" value="Eliminar" asp-route-aditionalServiceId="@Model.Product.AditionalServices[i].ProductAditionalServiceId" asp-page-handler="DeleteAditionalService" />
+                                            </div>
+                                        </div>
+                                        <div class="text-wrap">@string.Format("{0:C}", @Model.Product.AditionalServices[i].UnitPrice)</div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="shrink cell grid-y app-border-bottom padding-1">
+                                    <div class="font-bold">No hay servicios adicionales</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="auto cell app-overflow-y-auto padding-0 tabs-panel" id="excursionsPanel">
+                        <div class="auto cell grid-y">
+                            @if (Model.Product?.ExcursionDates != null && Model.Product.ExcursionDates.Any())
+                            {
+                                for (int i = 0; i < Model.Product.ExcursionDates.Length; i++)
+                                {
+                                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                                        <div class="grid-x">
+                                            <div class="grid-y align-center font-bold">Del @Model.Product.ExcursionDates[i].BeginDate.ToString("dd/MMMM/yyyy") al @Model.Product.ExcursionDates[i].EndDate.ToString("dd/MMMM/yyyy")</div>
+                                            @*<div class="grid-y align-center">
+                                                <input type="submit" class="clear button alert margin-0" value="Eliminar" asp-route-excursionId="@Model.Product.ExcursionDates[i].ExcursionId" asp-page-handler="DeleteAditionalService" />
+                                            </div>*@
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="shrink cell grid-y app-border-bottom padding-1">
+                                    <div class="font-bold">No hay excursiones</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shrink cell grid-x align-right bordered padding-1 app-panel-data-margin-bottom">
+            <div class="app-padding-button-modal-right">
+                <a asp-page="./Index" class="button margin-0">Regresar a listado</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="reveal" id="priceCategoryModal" data-reveal>
+    <button class="close-button" aria-label="Close menu" type="button" data-close>
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h3>Agregar categoría de precios</h3>
+    <form class="grid-y app-border-bottom padding-top-1 padding-horizontal-1" method="post" asp-page-handler="PriceCategory">
+        <input type="hidden" asp-for="Id" />
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell">
+                <label class="text-right middle" asp-for="PriceCategoryRequest.Description"></label>
+            </div>
+            <div class="small-9 cell">
+                <input type="text" class="form-control" value="" asp-for="PriceCategoryRequest.Description" placeholder="@Entities.Resources.Resource.Name_Display" autocomplete="off">
+            </div>
+            <div class="small-9 cell small-offset-3">
+                <span asp-validation-for="PriceCategoryRequest.Description"></span>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell app-padding-button-modal-left">
+                <a href="javascript:;" class="button expanded" data-close aria-label="Close modal">Cancelar</a>
+            </div>
+            <div class="small-9 cell">
+                <button type="submit" class="button expanded margin-0">@Entities.Resources.Resource.AppSaveButton</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="reveal" id="aditionalServiceModal" data-reveal>
+    <button class="close-button" aria-label="Close menu" type="button" data-close>
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h3>Agregar servicio adicional</h3>
+    <form class="grid-y app-border-bottom padding-top-1 padding-horizontal-1" method="post" asp-page-handler="AditionalService">
+        <input type="hidden" asp-for="Id" />
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell">
+                <label class="text-right middle" asp-for="AditionalService.Description"></label>
+            </div>
+            <div class="small-9 cell">
+                <input type="text" class="form-control" value="" asp-for="AditionalService.Description" placeholder="@Entities.Resources.Resource.Name_Display" autocomplete="off">
+            </div>
+            <div class="small-9 cell small-offset-3">
+                <span asp-validation-for="AditionalService.Description"></span>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell">
+                <label class="text-right middle" asp-for="AditionalService.UnitPrice"></label>
+            </div>
+            <div class="small-9 cell">
+                <input type="number" class="form-control" value="" asp-for="AditionalService.UnitPrice" placeholder="@Entities.Resources.Resource.UnitPrice_Display" autocomplete="off">
+            </div>
+            <div class="small-9 cell small-offset-3">
+                <span asp-validation-for="AditionalService.UnitPrice"></span>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell app-padding-button-modal-left">
+                <a href="javascript:;" class="button expanded" data-close aria-label="Close modal">Cancelar</a>
+            </div>
+            <div class="small-9 cell">
+                <button type="submit" class="button expanded margin-0">@Entities.Resources.Resource.AppSaveButton</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="reveal" id="addPriceDetailModal" data-reveal>
+    <button class="close-button" aria-label="Close menu" type="button" data-close>
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h3>Agregar detalle precio</h3>
+    <form class="grid-y app-border-bottom padding-top-1 padding-horizontal-1" method="post" asp-page-handler="AddPriceDetail">
+        <input type="hidden" asp-for="AddPriceDetailRequest.PriceCategoryId" />
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell">
+                <label class="text-right middle" asp-for="AddPriceDetailRequest.Description"></label>
+            </div>
+            <div class="small-9 cell">
+                <input type="text" class="form-control" value="" asp-for="AddPriceDetailRequest.Description" placeholder="@Entities.Resources.Resource.Name_Display" autocomplete="off">
+            </div>
+            <div class="small-9 cell small-offset-3">
+                <span asp-validation-for="AddPriceDetailRequest.Description"></span>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell">
+                <label class="text-right middle" asp-for="AddPriceDetailRequest.UnitPrice"></label>
+            </div>
+            <div class="small-9 cell">
+                <input type="number" class="form-control" value="" asp-for="AddPriceDetailRequest.UnitPrice" placeholder="@Entities.Resources.Resource.UnitPrice_Display" autocomplete="off">
+            </div>
+            <div class="small-9 cell small-offset-3">
+                <span asp-validation-for="AddPriceDetailRequest.UnitPrice"></span>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell app-padding-button-modal-left">
+                <a href="javascript:;" class="button expanded" data-close aria-label="Close modal">Cancelar</a>
+            </div>
+            <div class="small-9 cell">
+                <button type="submit" class="button expanded margin-0">@Entities.Resources.Resource.AppSaveButton</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="reveal" id="updateProductModal" data-reveal>
+    <button class="close-button" aria-label="Close menu" type="button" data-close>
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h3>Actualizar Producto</h3>
+    <form class="grid-y app-border-bottom padding-top-1 padding-horizontal-1" method="post" asp-page-handler="UpdateProduct">
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell">
+                <label class="text-right middle" asp-for="AddUpdateProductRequest.Description"></label>
+            </div>
+            <div class="small-9 cell">
+                <input type="text" class="form-control" value="" asp-for="AddUpdateProductRequest.Description" placeholder="@Entities.Resources.Resource.Name_Display" autocomplete="off">
+            </div>
+            <div class="small-9 cell small-offset-3">
+                <span asp-validation-for="AddUpdateProductRequest.Description"></span>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell app-padding-button-modal-left">
+                <a href="javascript:;" class="button expanded" data-close aria-label="Close modal">Cancelar</a>
+            </div>
+            <div class="small-9 cell">
+                <button type="submit" class="button expanded margin-0">@Entities.Resources.Resource.AppSaveButton</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="reveal" id="addExcursionModal" data-reveal>
+    <button class="close-button" aria-label="Close menu" type="button" data-close>
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h3>Agregar fecha de excursión</h3>
+    <form class="grid-y app-border-bottom padding-top-1 padding-horizontal-1" method="post" asp-page-handler="AddExcursion">
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell">
+                <label class="text-right middle" asp-for="AddExcursionRequest.BeginDate"></label>
+            </div>
+            <div class="small-9 cell">
+                <input type="date" class="form-control" value="" asp-for="AddExcursionRequest.BeginDate" placeholder="@Entities.Resources.Resource.BeginDate_Display" autocomplete="off">
+            </div>
+            <div class="small-9 cell small-offset-3">
+                <span asp-validation-for="AddExcursionRequest.BeginDate"></span>
+            </div>
+        </div>
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell">
+                <label class="text-right middle" asp-for="AddExcursionRequest.EndDate"></label>
+            </div>
+            <div class="small-9 cell">
+                <input type="date" class="form-control" value="" asp-for="AddExcursionRequest.EndDate" placeholder="@Entities.Resources.Resource.EndDate_Display" autocomplete="off">
+            </div>
+            <div class="small-9 cell small-offset-3">
+                <span asp-validation-for="AddExcursionRequest.EndDate"></span>
+            </div>
+        </div>
+
+        <div class="grid-x grid-padding-x">
+            <div class="small-3 cell app-padding-button-modal-left">
+                <a href="javascript:;" class="button expanded" data-close aria-label="Close modal">Cancelar</a>
+            </div>
+            <div class="small-9 cell">
+                <button type="submit" class="button expanded margin-0">@Entities.Resources.Resource.AppSaveButton</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var $initProductDescription = '@Model.Product.Description';
+            var $idAddPriceDetailRequest_PriceCategoryId = $('#AddPriceDetailRequest_PriceCategoryId');
+            var $appPriceCategoryLink = $('.app-price-category-link');
+            var $addPriceDetailRequest_Description = $('#AddPriceDetailRequest_Description');
+            var $addPriceDetailRequest_UnitPrice = $('#AddPriceDetailRequest_UnitPrice');
+            var $updateProductLink = $('#updateProductLink');
+            var $addUpdateProductRequest_Description = $('#AddUpdateProductRequest_Description');
+
+            $appPriceCategoryLink.on('click', function () {
+                var id = $(this).attr('id');
+                $idAddPriceDetailRequest_PriceCategoryId.val(id);
+                $addPriceDetailRequest_Description.val('');
+                $addPriceDetailRequest_UnitPrice.val('');
+            });
+
+            $updateProductLink.on('click', function () {
+                $addUpdateProductRequest_Description.val($initProductDescription);
+            });
+        });
+    </script>
+}

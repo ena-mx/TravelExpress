@@ -1,0 +1,127 @@
+﻿@page "{customerId:Guid}/{excursionId:Guid}"
+@model TravelExpress.WebApplication.Pages.Customers.FillOrderModel
+@{
+    ViewData["Title"] = "FillOrder";
+}
+
+@if (!ModelState.IsValid)
+{
+    <div class="callout small alert position-fixed-top" data-closable>
+        <button class="close-button" aria-label="Close menu" type="button" data-close>
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h6 class="font-bold app-text-error" style="color: #cc4b37;">Error al guardar</h6>
+        <div asp-validation-summary="ModelOnly"></div>
+    </div>
+}
+
+<form class="auto cell grid-y padding-horizontal-1" method="post">
+    <div class="shrink cell grid-x padding-top-1">
+        <div class="shrink cell grid-x align-left">
+            <h3 class="font-bold">Cliente - Llenar Orden</h3>
+        </div>
+    </div>
+    <div class="auto cell grid-x">
+        <div class="small-12 medium-3 cell grid-y bordered app-panel-data-margin-right app-panel-data-margin-bottom">
+            <div class="shrink cell grid-y app-border-bottom padding-1">
+                <h5 class="font-bold margin-0">Información de contacto</h5>
+            </div>
+            <div class="auto cell app-overflow-y-auto">
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Nombre</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Name&nbsp;@Model.Customer.CustomerInfo.FamilyName1&nbsp;@Model.Customer.CustomerInfo.FamilyName2</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Email</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Email</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Teléfono</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Telephone</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Celular</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Cellphone</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Cumpleaños</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.BirthDate.ToString("MMMM dd")</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Fecha registro</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.RegisterDate.ToString("dd/MMMM/yyyy")</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Última fecha de actualización</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.LastUpdateDate.ToString("dd/MMMM/yyyy")</div>
+                </div>
+            </div>
+        </div>
+        <div class="auto cell grid-y">
+            <div class="auto cell grid-y bordered app-panel-data-margin-bottom">
+                <div class="shrink cell padding-horizontal-1 padding-top-1 app-border-bottom">
+                    <h2>Ingrese los detalles de la orden</h2>
+                </div>
+                <div class="auto cell grid-x">
+                    @if (Model.ExcursionDetail.PriceCategories != null && Model.ExcursionDetail.PriceCategories.Any())
+                    {
+                        <div class="auto cell grid-y app-overflow-y-auto">
+                            <ul class="vertical menu accordion-menu" data-accordion-menu>
+                                @{
+                                    var excursionDetailCounter = 0;
+                                }
+                                @for (int i = 0; i < @Model.ExcursionDetail.PriceCategories.Length; i++)
+                                {
+                                    <li class="app-border-bottom">
+                                        <a class="font-bold app-list-item-title" href="javascript:;">@Model.ExcursionDetail.PriceCategories[i].Description</a>
+                                        <ul class="menu vertical nested is-active">
+                                            @for (int j = 0; j < @Model.ExcursionDetail.PriceCategories[i].PriceDetails.Length; j++)
+                                            {
+                                                <li>
+                                                    <a href="javascript:;">
+                                                        @Model.ExcursionDetail.PriceCategories[i].PriceDetails[j].Description
+                                                        <input type="number" asp-for="FillOrderRequest.PriceDetails[excursionDetailCounter].Quantity" value="0" />
+                                                        <input type="hidden" asp-for="FillOrderRequest.PriceDetails[excursionDetailCounter].PriceDetailId" value="@Model.ExcursionDetail.PriceCategories[i].PriceDetails[j].PriceDetailId" />
+                                                    </a>
+                                                </li>
+                                                { excursionDetailCounter++; }
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                @if (Model.ExcursionDetail.AditionalServices != null && Model.ExcursionDetail.AditionalServices.Any())
+                                {
+                                    <li class="app-border-bottom">
+                                        <a class="font-bold app-list-item-title" href="javascript:;">Servicios Adicionales</a>
+                                        <ul class="menu vertical nested is-active">
+                                            @for (int i = 0; i < @Model.ExcursionDetail.AditionalServices.Length; i++)
+                                            {
+                                                <li>
+                                                    <a href="javascript:;">
+                                                        @Model.ExcursionDetail.AditionalServices[i].Description&nbsp;@string.Format("{0:C}", @Model.ExcursionDetail.AditionalServices[i].UnitPrice)
+                                                        <input asp-for="FillOrderRequest.AditionalServices[i].Quantity" type="number" value="0" class="clear button alert margin-0" />
+                                                        <input asp-for="FillOrderRequest.AditionalServices[i].AditionalServiceId" type="hidden" value="@Model.ExcursionDetail.AditionalServices[i].AditionalServiceId" />
+                                                    </a>
+                                                </li>
+                                                { excursionDetailCounter++; }
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="shrink cell grid-x align-right bordered padding-1 app-panel-data-margin-bottom">
+                <div class="app-padding-button-modal-right">
+                    <a asp-page="./AddOrder" asp-route-id="@Model.CustomerId" class="button margin-0">Regresar</a>
+                </div>
+                <div class="app-padding-button-modal-right">
+                    <button type="submit" class="button">@Entities.Resources.Resource.AppSaveButton</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

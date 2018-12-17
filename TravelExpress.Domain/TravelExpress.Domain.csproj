@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EnaBricks.Generics" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TravelExpenses.SharedFramework\TravelExpenses.SharedFramework.csproj" />
+    <ProjectReference Include="..\TravelExpress.Enums\TravelExpress.Enums.csproj" />
+    <ProjectReference Include="..\TravelExpress.Resources\TravelExpress.Resources.csproj" />
+  </ItemGroup>
+
+</Project>

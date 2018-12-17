@@ -1,0 +1,202 @@
+﻿@page "{id:Guid}"
+@model TravelExpress.WebApplication.Pages.Customers.DetailsModel
+@{
+    ViewData["Title"] = Resources.Resource.CustomersDetailsPageTitle;
+}
+
+@if (!ModelState.IsValid)
+{
+    <div class="callout small alert position-fixed-top" data-closable>
+        <button class="close-button" aria-label="Close menu" type="button" data-close>
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h6 class="font-bold app-text-error" style="color: #cc4b37;">Error al guardar</h6>
+        <div asp-validation-summary="ModelOnly"></div>
+    </div>
+}
+
+    <div class="auto cell grid-y padding-horizontal-1">
+        <div class="shrink cell grid-x padding-top-1">
+            <div class="shrink cell grid-x align-left">
+                <h3 class="font-bold">@Resources.Resource.CustomersDetailsPageTitle</h3>
+            </div>
+            <div class="auto cell grid-x align-right">
+                <ul class="menu align-right">
+                    <li>
+                        <a asp-page="./Edit" asp-route-id="@Model.Id"><i class="fa fa-pencil" style="padding-right: .5rem;"></i>&nbsp;Editar</a>
+                    </li>
+                    <li>
+                        <a asp-page="./AddOrder" asp-route-id="@Model.Id"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar Orden</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" data-open="phonecallModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar llamada</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" data-open="observationsModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar Observacion</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="auto cell grid-x">
+            <div class="small-12 medium-3 cell grid-y bordered app-panel-data-margin-right app-panel-data-margin-bottom">
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <h5 class="font-bold margin-0">Información de contacto</h5>
+                </div>
+                <div class="auto cell app-overflow-y-auto">
+                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                        <div class="font-bold">Nombre</div>
+                        <div class="text-wrap">@Model.Customer.CustomerInfo.Name&nbsp;@Model.Customer.CustomerInfo.FamilyName1&nbsp;@Model.Customer.CustomerInfo.FamilyName2</div>
+                    </div>
+                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                        <div class="font-bold">Email</div>
+                        <div class="text-wrap">@Model.Customer.CustomerInfo.Email</div>
+                    </div>
+                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                        <div class="font-bold">Teléfono</div>
+                        <div class="text-wrap">@Model.Customer.CustomerInfo.Telephone</div>
+                    </div>
+                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                        <div class="font-bold">Celular</div>
+                        <div class="text-wrap">@Model.Customer.CustomerInfo.Cellphone</div>
+                    </div>
+                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                        <div class="font-bold">Cumpleaños</div>
+                        <div class="text-wrap">@Model.Customer.CustomerInfo.BirthDate.ToString("MMMM dd")</div>
+                    </div>
+                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                        <div class="font-bold">Fecha registro</div>
+                        <div class="text-wrap">@Model.Customer.CustomerInfo.RegisterDate.ToString("dd/MMMM/yyyy")</div>
+                    </div>
+                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                        <div class="font-bold">Última fecha de actualización</div>
+                        <div class="text-wrap">@Model.Customer.CustomerInfo.LastUpdateDate.ToString("dd/MMMM/yyyy")</div>
+                    </div>
+                </div>
+            </div>
+            <div class="auto cell grid-y">
+                <div class="auto cell grid-y bordered app-panel-data-margin-bottom">
+                    <div class="shrink cell">
+                        <ul class="tabs" data-tabs id="customer-tabs">
+                            <li class="tabs-title is-active"><a class="font-bold" data-tabs-target="panelPhoneCalls" aria-selected="true">Llamadas</a></li>
+                            <li class="tabs-title"><a class="font-bold" data-tabs-target="panelObservations">Observaciones</a></li>
+                            <li class="tabs-title"><a class="font-bold" data-tabs-target="panelHistory">Bitacora</a></li>
+                        </ul>
+                    </div>
+                    <div class="auto cell grid-y">
+                        <div class="auto cell grid-y tabs-content" data-tabs-content="customer-tabs">
+                            <div class="auto cell grid-y padding-0 tabs-panel is-active app-overflow-y-auto" id="panelPhoneCalls">
+                                <div class="auto cell grid-y">
+                                    @if (Model.Customer?.Phonecalls != null && Model.Customer.Phonecalls.Any())
+                                    {
+                                        for (int i = 0; i < Model.Customer.Phonecalls.Length; i++)
+                                        {
+                                            <div class="shrink cell grid-y app-border-bottom padding-1">
+                                                <div class="font-bold">@Model.Customer.Phonecalls[i].Description</div>
+                                                <div class="text-wrap">@Model.Customer.Phonecalls[i].RegisterDate.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                                                <div class="text-wrap">@Model.Customer.Phonecalls[i].User</div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="shrink cell grid-y app-border-bottom padding-1">
+                                            <div class="font-bold">No hay registro de llamadas</div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="auto cell grid-y padding-0 tabs-panel app-overflow-y-auto" id="panelObservations">
+                                <div class="auto cell grid-y">
+                                    @if (Model.Customer?.Observations != null && Model.Customer.Observations.Any())
+                                    {
+                                        for (int i = 0; i < Model.Customer.Observations.Length; i++)
+                                        {
+                                            <div class="shrink cell grid-y app-border-bottom padding-1">
+                                                <div class="font-bold">@Model.Customer.Observations[i].Description</div>
+                                                <div class="text-wrap">@Model.Customer.Observations[i].RegisterDate.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                                                <div class="text-wrap">@Model.Customer.Observations[i].User</div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="shrink cell grid-y app-border-bottom padding-1">
+                                            <div class="font-bold">No hay registro de observaciones</div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="auto cell app-overflow-y-auto padding-0 tabs-panel" id="panelHistory">
+                                @if (Model.Customer?.Historization != null && Model.Customer.Historization.Any())
+                                {
+                                    for (int i = 0; i < Model.Customer.Historization.Length; i++)
+                                    {
+                                        <div class="shrink cell grid-y app-border-bottom padding-1">
+                                            <div class="font-bold">@Model.Customer.Historization[i].Description</div>
+                                            <div class="text-wrap">@Model.Customer.Historization[i].Date.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form class="shrink cell grid-x align-right bordered padding-1 app-panel-data-margin-bottom" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="app-padding-button-modal-right">
+                        <a asp-page="./Index" asp-route-search="@(Model.Customer.CustomerInfo.Name + " " + Model.Customer.CustomerInfo.FamilyName1 + " " + Model.Customer.CustomerInfo.FamilyName2)" class="button margin-0">Regresar a listado</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<div class="reveal" id="phonecallModal" data-reveal>
+    <h3>Agregar llamada.</h3>
+    <form class="grid-x app-border-bottom padding-top-1 padding-horizontal-1" method="post">
+        <div class="small-12 cell">
+            <textarea class="app-modal-text-area" asp-for="AddPhoneCall.Description" type="text" placeholder="Detalle de llamada" autocomplete="off"></textarea>
+            @*<input type="hidden" asp-for="Id" />*@
+            <span asp-validation-for="AddPhoneCall.Description"></span>
+        </div>
+        <div class="small-6 cell app-padding-button-modal-left">
+            <a href="javascript:;" class="button expanded" data-close aria-label="Close modal">Cancelar</a>
+        </div>
+        <div class="small-6 cell app-padding-button-modal-right">
+            <input type="submit" class="button expanded" value="Guardar" asp-page-handler="AddPhoneCall" />
+        </div>
+    </form>
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="reveal" id="observationsModal" data-reveal>
+    <h3>Agregar Observación.</h3>
+    <form class="grid-x app-border-bottom padding-top-1 padding-horizontal-1" method="post">
+        <div class="small-12 cell">
+            <textarea class="app-modal-text-area" asp-for="AddObservation.Description" type="text" placeholder="Detalle de observación" autocomplete="off"></textarea>
+            @*<input type="hidden" asp-for="Id" />*@
+            <span asp-validation-for="AddObservation.Description"></span>
+        </div>
+        <div class="small-6 cell app-padding-button-modal-left">
+            <a href="javascript:;" class="button expanded" data-close aria-label="Close modal">Cancelar</a>
+        </div>
+        <div class="small-6 cell app-padding-button-modal-right">
+            <input type="submit" class="button expanded" value="Guardar" asp-page-handler="AddObservationCall" />
+        </div>
+    </form>
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('textarea').val('');
+        });
+    </script>
+}

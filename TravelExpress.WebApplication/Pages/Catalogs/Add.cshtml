@@ -1,0 +1,30 @@
+﻿@page
+@model TravelExpress.WebApplication.Pages.Catalogs.AddModel
+@{
+    ViewData["Title"] = "Add";
+}
+
+<form class="auto cell grid-y padding-horizontal-1" method="post">
+    <div class="shrink cell padding-top-1">
+        <h3>Nuevo Producto</h3>
+    </div>
+    <div class="auto cell grid-x app-overflow-y-auto">
+        <div class="auto cell grid-y padding-right-1">
+            <div class="shrink cell">
+                <label asp-for="Product.Description"></label>
+                <input type="text" class="form-control" asp-for="Product.Description" placeholder="@Entities.Resources.Resource.Name_Display" autocomplete="off">
+                <span asp-validation-for="Product.Description"></span>
+            </div>
+            <div class="shrink cell">
+                <div asp-validation-summary="ModelOnly"></div>
+            </div>
+        </div>
+    </div>
+    <div class="shrink cell grid-x align-right">
+        <button type="submit" class="button">@Entities.Resources.Resource.AppSaveButton</button>
+    </div>
+</form>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
