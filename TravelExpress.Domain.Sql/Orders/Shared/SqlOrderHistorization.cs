@@ -11,8 +11,32 @@
     public class SqlOrderHistorization : OrderHistorization
     {
         private static readonly string _connectionString = ConfigurationManager.ConnectionStrings["TravelExpress"].ConnectionString;
-        private static readonly string _addBillingHistorizationCmdTxt = @"";
-        private static readonly string _addOrderHistorizationCmdTxt = @"";
+        private static readonly string _addBillingHistorizationCmdTxt = @"
+            INSERT INTO [historization].[BillHistorization]
+            ([BillId], [BillStatusId], [UserId], [Date])
+            VALUES
+            (@billId, @billActivityType, @userId, @date)
+
+            IF @billActivityType > 1
+            BEGIN
+	            UPDATE [billing].[Bill]
+	            SET [BillStatusId] = @billActivityType
+	            WHERE BillId = @billId
+            END
+        ";
+        private static readonly string _addOrderHistorizationCmdTxt = @"
+            INSERT INTO [historization].[OrderHistorization]
+			([OrderId], [OrderStatusId], [UserId], [Date])
+			VALUES
+			(@orderId, @orderStatus, @userId, @date)
+
+			IF @orderStatus > 1
+			BEGIN
+				UPDATE [orders].[Order]
+				SET [OrderStatusId] = @orderStatus
+				WHERE OrderId = @orderId
+			END
+        ";
 
         public override async Task AddBillingHistorizationAsync(Guid billId, BillActivityType billActivityType, DateTime serverDate, Guid userId)
         {

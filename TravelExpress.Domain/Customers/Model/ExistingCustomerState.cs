@@ -4,13 +4,14 @@
     using System.Threading.Tasks;
     using TravelExpenses.SharedFramework;
     using TravelExpress.Domain.Customers.Shared;
+    using TravelExpress.Domain.UserHistorization;
     using TravelExpress.Enums.Customers;
 
     internal sealed class ExistingCustomerState : CustomerState
     {
         #region Constructor
 
-        public ExistingCustomerState(CustomerComponent customerComponent, CustomerStorageComponent customerStorage, CustomerHistorization customerHistorization, IDateComponent dateComponent) : base(customerComponent, customerStorage, customerHistorization, dateComponent)
+        public ExistingCustomerState(CustomerComponent customerComponent, CustomerStorageComponent customerStorage, CustomerHistorization customerHistorization, IDateComponent dateComponent, UserHistorizationComponent userHistorizationComponent) : base(customerComponent, customerStorage, customerHistorization, dateComponent, userHistorizationComponent)
         {
         }
 
@@ -24,6 +25,8 @@
 
             await _customerHistorization.AddCustomerActivity(_customerComponent.CustomerId, CustomerActivityType.ObservationAdded, _dateComponent.ServerDate, userId);
 
+            await _userHistorizationComponent.AddUserActivity(_customerComponent.CustomerId, Enums.UserHistorization.UserActivityType.CustomerObservationAdded, _dateComponent.ServerDate, userId);
+
             return _successWorkflowResult;
         }
 
@@ -32,6 +35,8 @@
             await _customerStorage.TryAddPhoneCallAsync(_customerComponent.CustomerId, description, userId, _dateComponent.ServerDate);
 
             await _customerHistorization.AddCustomerActivity(_customerComponent.CustomerId, CustomerActivityType.PhonecallAdded, _dateComponent.ServerDate, userId);
+
+            await _userHistorizationComponent.AddUserActivity(_customerComponent.CustomerId, Enums.UserHistorization.UserActivityType.CustomerPhoneCallAdded, _dateComponent.ServerDate, userId);
 
             return _successWorkflowResult;
         }
@@ -46,6 +51,8 @@
                 return _errorSavingCustomerInStorage;
 
             await _customerHistorization.AddCustomerActivity(_customerComponent.CustomerId, CustomerActivityType.CustomerInfoUpdated, _dateComponent.ServerDate, userId);
+
+            await _userHistorizationComponent.AddUserActivity(_customerComponent.CustomerId, Enums.UserHistorization.UserActivityType.CustomerInfoUpdated, _dateComponent.ServerDate, userId);
 
             return _successWorkflowResult;
         }

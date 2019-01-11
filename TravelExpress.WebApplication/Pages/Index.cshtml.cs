@@ -1,34 +1,31 @@
 ﻿namespace TravelExpress.WebApplication.Pages
 {
     using Microsoft.AspNetCore.Mvc.RazorPages;
+    using System;
+    using System.Threading.Tasks;
+    using TravelExpenses.SharedFramework;
+    using TravelExpress.Queries.Analytics;
 
     public class IndexModel : PageModel
     {
-        public string Message { get; set; } = "Initial Request";
+        private readonly AnalyticsQueryComponent _analyticsQueryComponent;
+        private readonly IDateComponent _dateComponent;
 
-        public void OnGet()
+        public AnalyticsModel AnalyticsModel { get; set; }
+
+        public IndexModel(
+            AnalyticsQueryComponent analyticsQueryComponent,
+            IDateComponent dateComponent)
         {
-
+            _analyticsQueryComponent = analyticsQueryComponent ?? throw new ArgumentNullException(nameof(analyticsQueryComponent));
+            _dateComponent = dateComponent ?? throw new ArgumentNullException(nameof(dateComponent));
         }
 
-        public void OnPost()
+        public async Task OnGetAsync()
         {
-            Message = "Form Posted";
-        }
-
-        public void OnPostDelete()
-        {
-            Message = "Delete handler fired";
-        }
-
-        public void OnPostEdit(int id)
-        {
-            Message = "Edit handler fired";
-        }
-
-        public void OnPostView(int id)
-        {
-            Message = $"View handler fired for {id}";
+            DateTime dateActiveExcursions = _dateComponent.ServerDate.Date;
+            DateTime userActivityDate = dateActiveExcursions.AddDays(-(dateActiveExcursions.Day - 1));
+            AnalyticsModel = await _analyticsQueryComponent.AnalyticsModelAsync(userActivityDate, dateActiveExcursions);
         }
     }
 }

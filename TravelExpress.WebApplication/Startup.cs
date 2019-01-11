@@ -10,19 +10,26 @@ namespace TravelExpress.WebApplication
     using Microsoft.AspNetCore.Mvc.Authorization;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using TravelExpenses.SharedFramework;
+    using TravelExpress.Domain.Application;
     using TravelExpress.Domain.Customers.Model;
-    using TravelExpress.Domain.Customers.Shared;
     using TravelExpress.Domain.Orders;
     using TravelExpress.Domain.Orders.Component;
     using TravelExpress.Domain.Products;
+    using TravelExpress.Domain.Sql.Application;
     using TravelExpress.Domain.Sql.Customers.Model;
-    using TravelExpress.Domain.Sql.Customers.Shared;
     using TravelExpress.Domain.Sql.Orders.Component;
     using TravelExpress.Domain.Sql.Orders.Shared;
     using TravelExpress.Domain.Sql.Products;
+    using TravelExpress.Queries.Analytics;
     using TravelExpress.Queries.Customers;
+    using TravelExpress.Queries.Excursions;
+    using TravelExpress.Queries.Orders;
     using TravelExpress.Queries.Products;
+    using TravelExpress.Queries.Sql.Analytics;
     using TravelExpress.Queries.Sql.Customers;
+    using TravelExpress.Queries.Sql.Excursions;
+    using TravelExpress.Queries.Sql.Orders;
     using TravelExpress.Queries.Sql.Products;
 
     public class Startup
@@ -58,16 +65,25 @@ namespace TravelExpress.WebApplication
             {
                 options.Conventions.AllowAnonymousToFolder("/Account");
             })
+            .AddRazorOptions(options =>
+            {
+                options.PageViewLocationFormats.Add("/Pages/Shared/Dashboard/{0}.cshtml");
+            })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddScoped<ApplicationLog, SqlApplicationLog>();
             services.AddScoped<CustomersQueryComponent, SqlCustomersQueryComponent>();
             services.AddSingleton<CustomerComponentUowFactory, SqlCustomerComponentUowFactory>();
             services.AddScoped<OrderFactory, SqlOrderFactory>();
             services.AddScoped<OrderHistorization, SqlOrderHistorization>();
             services.AddScoped<OrderStorage, SqlOrderStorage>();
+            services.AddScoped<IDateComponent, CstMexDateComponent>();
 
             services.AddSingleton<IProductComponentFactory, SqlProductComponentFactory>();
             services.AddScoped<ProductQueryComponent, SqlProductQueryComponent>();
+            services.AddScoped<OrderModelQueryComponent, SqlOrderModelQueryComponent>();
+            services.AddScoped<AnalyticsQueryComponent, SqlAnalyticsQueryComponent>();
+            services.AddScoped<ExcursionQueryComponent, SqlExcursionQueryComponent>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

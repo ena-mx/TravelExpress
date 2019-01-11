@@ -15,142 +15,251 @@
     </div>
 }
 
-    <div class="auto cell grid-y padding-horizontal-1">
-        <div class="shrink cell grid-x padding-top-1">
-            <div class="shrink cell grid-x align-left">
-                <h3 class="font-bold">@Resources.Resource.CustomersDetailsPageTitle</h3>
+<div class="auto cell grid-y padding-horizontal-1">
+    <div class="shrink cell grid-x padding-top-1">
+        <div class="shrink cell grid-x align-left">
+            <h3 class="font-bold">@Resources.Resource.CustomersDetailsPageTitle</h3>
+        </div>
+        <div class="auto cell grid-x align-right">
+            <ul class="menu align-right">
+                <li>
+                    <a asp-page="./Edit" asp-route-id="@Model.Id"><i class="fa fa-pencil" style="padding-right: .5rem;"></i>&nbsp;Editar</a>
+                </li>
+                <li>
+                    <a asp-page="./AddOrder" asp-route-id="@Model.Id"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar Orden</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-open="phonecallModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar llamada</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-open="observationsModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar Observacion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="auto cell grid-x">
+        <div class="small-12 medium-3 cell grid-y bordered app-panel-data-margin-right app-panel-data-margin-bottom">
+            <div class="shrink cell grid-y app-border-bottom padding-1">
+                <h5 class="font-bold margin-0">Información de contacto</h5>
             </div>
-            <div class="auto cell grid-x align-right">
-                <ul class="menu align-right">
-                    <li>
-                        <a asp-page="./Edit" asp-route-id="@Model.Id"><i class="fa fa-pencil" style="padding-right: .5rem;"></i>&nbsp;Editar</a>
-                    </li>
-                    <li>
-                        <a asp-page="./AddOrder" asp-route-id="@Model.Id"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar Orden</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" data-open="phonecallModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar llamada</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" data-open="observationsModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar Observacion</a>
-                    </li>
-                </ul>
+            <div class="auto cell app-overflow-y-auto">
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Nombre</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Name&nbsp;@Model.Customer.CustomerInfo.FamilyName1&nbsp;@Model.Customer.CustomerInfo.FamilyName2</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Email</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Email</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Teléfono</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Telephone</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Celular</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.Cellphone</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Cumpleaños</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.BirthDate.ToString("MMMM dd")</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Fecha registro</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.RegisterDate.ToString("dd/MMMM/yyyy")</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Última fecha de actualización</div>
+                    <div class="text-wrap">@Model.Customer.CustomerInfo.LastUpdateDate.ToString("dd/MMMM/yyyy")</div>
+                </div>
             </div>
         </div>
+        <div class="auto cell grid-y">
+            <div class="auto cell grid-y bordered app-panel-data-margin-bottom">
+                <div class="shrink cell">
+                    <ul class="tabs" data-tabs id="customer-tabs">
+                        <li class="tabs-title is-active"><a class="font-bold" data-tabs-target="panelConfirmedOrders" aria-selected="true">Ordenes Activas</a></li>
+                        <li class="tabs-title"><a class="font-bold" data-tabs-target="panelHistoricOrders">Ordenes Histórico</a></li>
+                        <li class="tabs-title"><a class="font-bold" data-tabs-target="panelPhoneCalls">Llamadas</a></li>
+                        <li class="tabs-title"><a class="font-bold" data-tabs-target="panelObservations">Observaciones</a></li>
+                        <li class="tabs-title"><a class="font-bold" data-tabs-target="panelHistory">Bitacora</a></li>
+                    </ul>
+                </div>
+                <div class="auto cell grid-y">
+                    <div class="auto cell grid-y tabs-content" data-tabs-content="customer-tabs">
+                        <div class="auto cell is-active padding-0 tabs-panel" id="panelConfirmedOrders">
+                            <div class="auto cell grid-y app-tabs-grid">
+                                <div class="shrink cell grid-x font-bold font-normal margin-right-1" style="margin-right: 1.2rem !important; border-top: 0.0625rem solid #cacaca; background: #1B75CF;">
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Excursión</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Inicio</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Fin</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Fecha Orden</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Total</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Pagado</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Adeudo</div>
+                                    <div class="shrink cell app-grid-row padding-top-1 padding-bottom-1"><i class="fa fa-gear fa-lg" style="color: white; padding-right: 1.25rem; padding-left: 1rem;"></i></div>
+                                </div>
+                                <div class="auto cell grid-y bordered">
 
-        <div class="auto cell grid-x">
-            <div class="small-12 medium-3 cell grid-y bordered app-panel-data-margin-right app-panel-data-margin-bottom">
-                <div class="shrink cell grid-y app-border-bottom padding-1">
-                    <h5 class="font-bold margin-0">Información de contacto</h5>
-                </div>
-                <div class="auto cell app-overflow-y-auto">
-                    <div class="shrink cell grid-y app-border-bottom padding-1">
-                        <div class="font-bold">Nombre</div>
-                        <div class="text-wrap">@Model.Customer.CustomerInfo.Name&nbsp;@Model.Customer.CustomerInfo.FamilyName1&nbsp;@Model.Customer.CustomerInfo.FamilyName2</div>
-                    </div>
-                    <div class="shrink cell grid-y app-border-bottom padding-1">
-                        <div class="font-bold">Email</div>
-                        <div class="text-wrap">@Model.Customer.CustomerInfo.Email</div>
-                    </div>
-                    <div class="shrink cell grid-y app-border-bottom padding-1">
-                        <div class="font-bold">Teléfono</div>
-                        <div class="text-wrap">@Model.Customer.CustomerInfo.Telephone</div>
-                    </div>
-                    <div class="shrink cell grid-y app-border-bottom padding-1">
-                        <div class="font-bold">Celular</div>
-                        <div class="text-wrap">@Model.Customer.CustomerInfo.Cellphone</div>
-                    </div>
-                    <div class="shrink cell grid-y app-border-bottom padding-1">
-                        <div class="font-bold">Cumpleaños</div>
-                        <div class="text-wrap">@Model.Customer.CustomerInfo.BirthDate.ToString("MMMM dd")</div>
-                    </div>
-                    <div class="shrink cell grid-y app-border-bottom padding-1">
-                        <div class="font-bold">Fecha registro</div>
-                        <div class="text-wrap">@Model.Customer.CustomerInfo.RegisterDate.ToString("dd/MMMM/yyyy")</div>
-                    </div>
-                    <div class="shrink cell grid-y app-border-bottom padding-1">
-                        <div class="font-bold">Última fecha de actualización</div>
-                        <div class="text-wrap">@Model.Customer.CustomerInfo.LastUpdateDate.ToString("dd/MMMM/yyyy")</div>
-                    </div>
-                </div>
-            </div>
-            <div class="auto cell grid-y">
-                <div class="auto cell grid-y bordered app-panel-data-margin-bottom">
-                    <div class="shrink cell">
-                        <ul class="tabs" data-tabs id="customer-tabs">
-                            <li class="tabs-title is-active"><a class="font-bold" data-tabs-target="panelPhoneCalls" aria-selected="true">Llamadas</a></li>
-                            <li class="tabs-title"><a class="font-bold" data-tabs-target="panelObservations">Observaciones</a></li>
-                            <li class="tabs-title"><a class="font-bold" data-tabs-target="panelHistory">Bitacora</a></li>
-                        </ul>
-                    </div>
-                    <div class="auto cell grid-y">
-                        <div class="auto cell grid-y tabs-content" data-tabs-content="customer-tabs">
-                            <div class="auto cell grid-y padding-0 tabs-panel is-active app-overflow-y-auto" id="panelPhoneCalls">
-                                <div class="auto cell grid-y">
-                                    @if (Model.Customer?.Phonecalls != null && Model.Customer.Phonecalls.Any())
+                                    @if (Model.Customer.ConfirmedOrders != null && Model.Customer.ConfirmedOrders.Any())
                                     {
-                                        for (int i = 0; i < Model.Customer.Phonecalls.Length; i++)
-                                        {
-                                            <div class="shrink cell grid-y app-border-bottom padding-1">
-                                                <div class="font-bold">@Model.Customer.Phonecalls[i].Description</div>
-                                                <div class="text-wrap">@Model.Customer.Phonecalls[i].RegisterDate.ToString("dd/MMMM/yyyy hh:mm tt")</div>
-                                                <div class="text-wrap">@Model.Customer.Phonecalls[i].User</div>
-                                            </div>
-                                        }
+                                        <div class="auto cell app-overflow-y-scroll">
+                                            @for (int i = 0; i < Model.Customer.ConfirmedOrders.Length; i++)
+                                            {
+                                                <div class="shrink cell grid-x app-grid-row">
+                                                    <div class="auto cell app-grid-row">@Model.Customer.ConfirmedOrders[i].ExcursionDescription</div>
+                                                    <div class="auto cell app-grid-row">@Model.Customer.ConfirmedOrders[i].ExcursionBeginDate.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row">@Model.Customer.ConfirmedOrders[i].ExcursionEndDate.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row">@Model.Customer.ConfirmedOrders[i].OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.Customer.ConfirmedOrders[i].TotalAmount)</div>
+                                                    <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.Customer.ConfirmedOrders[i].TotalPaid)</div>
+                                                    <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.Customer.ConfirmedOrders[i].TotalDebit)</div>
+                                                    <div class="shrink cell app-grid-row grid-x align-right">
+                                                        <a asp-page="/Orders/OrderDetail" asp-route-id="@Model.Customer.ConfirmedOrders[i].OrderId" class="padding-right-1 padding-left-1"><i class="fa fa-folder-open fa-lg" style="color: #1B75CF;"></i></a>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
                                     }
                                     else
                                     {
-                                        <div class="shrink cell grid-y app-border-bottom padding-1">
-                                            <div class="font-bold">No hay registro de llamadas</div>
+                                        <div class="auto cell grid-y align-center">
+                                            <div class="shrink cell grid-x align-center">
+                                                <h6>No hay registros de ordenes activas</h6>
+                                            </div>
                                         </div>
                                     }
                                 </div>
+                                <div class="shrink cell grid-x bordered margin-right-1">
+                                    <div class="auto cell grid-x">
+                                        <div class="shrink cell grid-x align-right">
+                                            <div class="shrink cell grid-y align-center padding-top-1 padding-bottom-1 padding-left-1">@(@Model.Customer.ConfirmedOrders != null && @Model.Customer.ConfirmedOrders.Any() ? Model.Customer.ConfirmedOrders.Count().ToString() : "0" )&nbsp;registros</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="auto cell grid-y padding-0 tabs-panel app-overflow-y-auto" id="panelObservations">
-                                <div class="auto cell grid-y">
-                                    @if (Model.Customer?.Observations != null && Model.Customer.Observations.Any())
+                        </div>
+                        <div class="auto cell app-overflow-y-auto padding-0 tabs-panel" id="panelHistoricOrders">
+
+                            <div class="auto cell grid-y app-tabs-grid">
+                                <div class="shrink cell grid-x font-bold font-normal margin-right-1" style="margin-right: 1.2rem !important; border-top: 0.0625rem solid #cacaca; background: #1B75CF;">
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Excursión</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Inicio</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Fin</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Fecha Orden</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Total</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Pagado</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Adeudo</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Status</div>
+                                    <div class="shrink cell app-grid-row padding-top-1 padding-bottom-1"><i class="fa fa-gear fa-lg" style="color: white; padding-right: 1.25rem; padding-left: 1rem;"></i></div>
+                                </div>
+                                <div class="auto cell grid-y bordered">
+
+                                    @if (Model.Customer.HistoricOrders != null && Model.Customer.HistoricOrders.Any())
                                     {
-                                        for (int i = 0; i < Model.Customer.Observations.Length; i++)
-                                        {
-                                            <div class="shrink cell grid-y app-border-bottom padding-1">
-                                                <div class="font-bold">@Model.Customer.Observations[i].Description</div>
-                                                <div class="text-wrap">@Model.Customer.Observations[i].RegisterDate.ToString("dd/MMMM/yyyy hh:mm tt")</div>
-                                                <div class="text-wrap">@Model.Customer.Observations[i].User</div>
+                                        <div class="auto cell app-overflow-y-scroll">
+                                            @for (int i = 0; i < Model.Customer.HistoricOrders.Length; i++)
+                                            {
+                                            <div class="shrink cell grid-x app-grid-row">
+                                                <div class="auto cell app-grid-row">@Model.Customer.HistoricOrders[i].ExcursionDescription</div>
+                                                <div class="auto cell app-grid-row">@Model.Customer.HistoricOrders[i].ExcursionBeginDate.ToString("dd/MMMM/yyyy")</div>
+                                                <div class="auto cell app-grid-row">@Model.Customer.HistoricOrders[i].ExcursionEndDate.ToString("dd/MMMM/yyyy")</div>
+                                                <div class="auto cell app-grid-row">@Model.Customer.HistoricOrders[i].OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
+                                                <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.Customer.HistoricOrders[i].TotalAmount)</div>
+                                                <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.Customer.HistoricOrders[i].TotalPaid)</div>
+                                                <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.Customer.HistoricOrders[i].TotalDebit)</div>
+                                                <div class="auto cell app-grid-row text-center font-bold">@(Model.Customer.HistoricOrders[i].OrderStatusId == 2 ? "Pagada" : "Cancelada")</div>
+                                                <div class="shrink cell app-grid-row grid-x align-right">
+                                                    <a asp-page="/Orders/OrderDetail" asp-route-id="@Model.Customer.HistoricOrders[i].OrderId" class="padding-right-1 padding-left-1"><i class="fa fa-folder-open fa-lg" style="color: #1B75CF;"></i></a>
+                                                </div>
                                             </div>
-                                        }
+                                            }
+                                        </div>
                                     }
                                     else
                                     {
-                                        <div class="shrink cell grid-y app-border-bottom padding-1">
-                                            <div class="font-bold">No hay registro de observaciones</div>
+                                        <div class="auto cell grid-y align-center">
+                                            <div class="shrink cell grid-x align-center">
+                                                <h6>No hay historico de ordenes</h6>
+                                            </div>
                                         </div>
                                     }
                                 </div>
+                                <div class="shrink cell grid-x bordered margin-right-1">
+                                    <div class="auto cell grid-x">
+                                        <div class="shrink cell grid-x align-right">
+                                            <div class="shrink cell grid-y align-center padding-top-1 padding-bottom-1 padding-left-1">@(@Model.Customer.HistoricOrders != null && @Model.Customer.HistoricOrders.Any() ? Model.Customer.HistoricOrders.Count().ToString() : "0" )&nbsp;registros</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="auto cell app-overflow-y-auto padding-0 tabs-panel" id="panelHistory">
-                                @if (Model.Customer?.Historization != null && Model.Customer.Historization.Any())
+                        </div>
+                        <div class="auto cell grid-y padding-0 tabs-panel app-overflow-y-auto" id="panelPhoneCalls">
+                            <div class="auto cell grid-y">
+                                @if (Model.Customer?.Phonecalls != null && Model.Customer.Phonecalls.Any())
                                 {
-                                    for (int i = 0; i < Model.Customer.Historization.Length; i++)
+                                    for (int i = 0; i < Model.Customer.Phonecalls.Length; i++)
                                     {
                                         <div class="shrink cell grid-y app-border-bottom padding-1">
-                                            <div class="font-bold">@Model.Customer.Historization[i].Description</div>
-                                            <div class="text-wrap">@Model.Customer.Historization[i].Date.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                                            <div class="font-bold">@Model.Customer.Phonecalls[i].Description</div>
+                                            <div class="text-wrap">@Model.Customer.Phonecalls[i].RegisterDate.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                                            <div class="text-wrap">@Model.Customer.Phonecalls[i].User</div>
                                         </div>
                                     }
                                 }
+                                else
+                                {
+                                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                                        <div class="font-bold">No hay registro de llamadas</div>
+                                    </div>
+                                }
                             </div>
+                        </div>
+                        <div class="auto cell grid-y padding-0 tabs-panel app-overflow-y-auto" id="panelObservations">
+                            <div class="auto cell grid-y">
+                                @if (Model.Customer?.Observations != null && Model.Customer.Observations.Any())
+                                {
+                                    for (int i = 0; i < Model.Customer.Observations.Length; i++)
+                                    {
+                                        <div class="shrink cell grid-y app-border-bottom padding-1">
+                                            <div class="font-bold">@Model.Customer.Observations[i].Description</div>
+                                            <div class="text-wrap">@Model.Customer.Observations[i].RegisterDate.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                                            <div class="text-wrap">@Model.Customer.Observations[i].User</div>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                                        <div class="font-bold">No hay registro de observaciones</div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="auto cell app-overflow-y-auto padding-0 tabs-panel" id="panelHistory">
+                            @if (Model.Customer?.Historization != null && Model.Customer.Historization.Any())
+                            {
+                                for (int i = 0; i < Model.Customer.Historization.Length; i++)
+                                {
+                                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                                        <div class="font-bold">@Model.Customer.Historization[i].Description</div>
+                                        <div class="text-wrap">@Model.Customer.Historization[i].Date.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                                    </div>
+                                }
+                            }
                         </div>
                     </div>
                 </div>
-                <form class="shrink cell grid-x align-right bordered padding-1 app-panel-data-margin-bottom" method="post">
-                    <input type="hidden" asp-for="Id" />
-                    <div class="app-padding-button-modal-right">
-                        <a asp-page="./Index" asp-route-search="@(Model.Customer.CustomerInfo.Name + " " + Model.Customer.CustomerInfo.FamilyName1 + " " + Model.Customer.CustomerInfo.FamilyName2)" class="button margin-0">Regresar a listado</a>
-                    </div>
-                </form>
             </div>
+            <form class="shrink cell grid-x align-right bordered padding-1 app-panel-data-margin-bottom" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="app-padding-button-modal-right">
+                    <a asp-page="./Index" asp-route-search="@(Model.Customer.CustomerInfo.Name + " " + Model.Customer.CustomerInfo.FamilyName1 + " " + Model.Customer.CustomerInfo.FamilyName2)" class="button margin-0">Regresar a listado</a>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
 <div class="reveal" id="phonecallModal" data-reveal>
     <h3>Agregar llamada.</h3>

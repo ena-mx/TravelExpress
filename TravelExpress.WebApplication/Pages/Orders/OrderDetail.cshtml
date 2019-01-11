@@ -1,0 +1,282 @@
+﻿@page "{id:Guid}"
+@model TravelExpress.WebApplication.Pages.Orders.OrderDetailModel
+@{
+    ViewData["Title"] = "OrderDetail";
+}
+
+@if (!ModelState.IsValid)
+{
+    <div class="callout small alert position-fixed-top" data-closable>
+        <button class="close-button" aria-label="Close menu" type="button" data-close>
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h6 class="font-bold app-text-error" style="color: #cc4b37;">Error al guardar</h6>
+        <div asp-validation-summary="ModelOnly"></div>
+    </div>
+}
+
+<div class="auto cell grid-y padding-horizontal-1">
+    <div class="shrink cell grid-x padding-top-1">
+        <div class="shrink cell grid-x align-left">
+            <h3 class="font-bold">Detalles de orden</h3>
+        </div>
+        @if (Model.OrderModel.OrderHeader.OrderStatusId == 1)
+        {
+            <div class="auto cell grid-x align-right">
+                <ul class="menu align-right">
+                    <li>
+                        <a id="addPaymentTriggerButton" href="javascript:;" data-open="addPaymentModal"><i class="fa fa-plus" style="padding-right: .5rem;"></i>&nbsp;Agregar Pago</a>
+                    </li>
+                    @if (Model.OrderModel.BillingInfo.TotalPaid == 0)
+                    {
+                        <li>
+                            <a id="cancelTriggerButton" href="javascript:;" data-open="cancelOrderModal"><i class="fa fa-trash" style="padding-right: .5rem;"></i>&nbsp;Cancelar Orden</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+    <div class="auto cell grid-x">
+        <div class="small-12 medium-3 cell grid-y bordered app-panel-data-margin-right app-panel-data-margin-bottom">
+            <div class="shrink cell grid-y app-border-bottom padding-1">
+                <h5 class="font-bold margin-0">Información de contacto</h5>
+            </div>
+            <div class="auto cell app-overflow-y-auto">
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Nombre</div>
+                    <div class="text-wrap">@Model.OrderModel.CustomerInfo.Name&nbsp;@Model.OrderModel.CustomerInfo.FamilyName1&nbsp;@Model.OrderModel.CustomerInfo.FamilyName2</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Email</div>
+                    <div class="text-wrap">@Model.OrderModel.CustomerInfo.Email</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Teléfono</div>
+                    <div class="text-wrap">@Model.OrderModel.CustomerInfo.Telephone</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Celular</div>
+                    <div class="text-wrap">@Model.OrderModel.CustomerInfo.Cellphone</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Cumpleaños</div>
+                    <div class="text-wrap">@Model.OrderModel.CustomerInfo.BirthDate.ToString("MMMM dd")</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Fecha registro</div>
+                    <div class="text-wrap">@Model.OrderModel.CustomerInfo.RegisterDate.ToString("dd/MMMM/yyyy")</div>
+                </div>
+                <div class="shrink cell grid-y app-border-bottom padding-1">
+                    <div class="font-bold">Última fecha de actualización</div>
+                    <div class="text-wrap">@Model.OrderModel.CustomerInfo.LastUpdateDate.ToString("dd/MMMM/yyyy")</div>
+                </div>
+            </div>
+        </div>
+        <div class="auto cell grid-y">
+            <div class="shrink cell grid-y bordered app-panel-data-margin-bottom">
+                <div class="shrink cell grid-x font-bold font-normal" style="border-top: 0.0625rem solid #cacaca; background: #1B75CF;">
+                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Estatus</div>
+                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Fecha</div>
+                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Excursión</div>
+                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Inicio Excursión</div>
+                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Fin Excursión</div>
+                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Monto Total</div>
+                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Monto Pagado</div>
+                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Monto Adeudo</div>
+                </div>
+                <div class="shrink cell grid-y">
+                    <div class="shrink cell grid-x">
+                        <div class="auto cell app-grid-row font-bold font-italic">@Model.OrderModel.OrderHeader.StatusDescription</div>
+                        <div class="auto cell app-grid-row">@Model.OrderModel.OrderHeader.OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
+                        <div class="auto cell app-grid-row">@Model.OrderModel.OrderHeader.ExcursionDescription</div>
+                        <div class="auto cell app-grid-row">@Model.OrderModel.OrderHeader.ExcursionBeginDate.ToString("dd/MMMM/yyyy")</div>
+                        <div class="auto cell app-grid-row">@Model.OrderModel.OrderHeader.ExcursionEndDate.ToString("dd/MMMM/yyyy")</div>
+                        <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.OrderModel.BillingInfo.TotalAmount)</div>
+                        <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.OrderModel.BillingInfo.TotalPaid)</div>
+                        <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.OrderModel.BillingInfo.TotalDebit)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="auto cell grid-y bordered app-panel-data-margin-bottom">
+                <div class="shrink cell">
+                    <ul class="tabs" data-tabs id="customer-tabs">
+                        <li class="tabs-title is-active"><a class="font-bold" data-tabs-target="panelOrderDetails" aria-selected="true">Detalles</a></li>
+                        <li class="tabs-title"><a class="font-bold" data-tabs-target="panelOrderPayments">Pagos</a></li>
+                        <li class="tabs-title"><a class="font-bold" data-tabs-target="panelOrderHistorization">Bitacora Orden</a></li>
+                        <li class="tabs-title"><a class="font-bold" data-tabs-target="panelBillingHistorization">Bitacora Adeudos</a></li>
+                    </ul>
+                </div>
+                <div class="auto cell grid-y">
+                    <div class="auto cell grid-y tabs-content" data-tabs-content="customer-tabs">
+                        <div class="auto cell is-active padding-0 tabs-panel" id="panelOrderDetails">
+                            <div class="auto cell grid-y app-tabs-grid">
+                                <div class="shrink cell grid-x font-bold font-normal margin-right-1" style="margin-right: 1.2rem !important; border-top: 0.0625rem solid #cacaca; background: #1B75CF;">
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Tipo</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Descripción</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Cantidad</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Precio unitario</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Total</div>
+                                </div>
+                                <div class="auto cell grid-y bordered">
+                                    @if (Model.OrderModel?.OrderDetails != null && Model.OrderModel.OrderDetails.Any())
+                                    {
+                                        <div class="auto cell app-overflow-y-scroll">
+                                            @for (int i = 0; i < Model.OrderModel.OrderDetails.Length; i++)
+                                            {
+                                            <div class="shrink cell grid-x app-grid-row">
+                                                <div class="auto cell app-grid-row">@Model.OrderModel.OrderDetails[i].OrderDetailTypeDescription</div>
+                                                <div class="auto cell app-grid-row">@Model.OrderModel.OrderDetails[i].OrderDetailDescription</div>
+                                                <div class="auto cell app-grid-row text-right font-bold">@Model.OrderModel.OrderDetails[i].Quantity</div>
+                                                <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.OrderModel.OrderDetails[i].UnitPrice)</div>
+                                                <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.OrderModel.OrderDetails[i].Total)</div>
+                                            </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="auto cell grid-y align-center">
+                                            <div class="shrink cell grid-x align-center">
+                                                <h6>No hay registros de pagos</h6>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="shrink cell grid-x bordered margin-right-1">
+                                    <div class="auto cell grid-x">
+                                        <div class="shrink cell grid-x align-right">
+                                            <div class="shrink cell grid-y align-center padding-top-1 padding-bottom-1 padding-left-1">@(Model.OrderModel.OrderDetails != null && Model.OrderModel.OrderDetails.Any() ? Model.OrderModel.OrderDetails.Count().ToString() : "0" )&nbsp;registros</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="auto cell padding-0 tabs-panel" id="panelOrderPayments">
+                            <div class="auto cell grid-y app-tabs-grid">
+                                <div class="shrink cell grid-x font-bold font-normal margin-right-1" style="margin-right: 1.2rem !important; border-top: 0.0625rem solid #cacaca; background: #1B75CF;">
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Fecha</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Pago</div>
+                                </div>
+                                <div class="auto cell grid-y bordered">
+
+                                    @if (Model.OrderModel.BillingInfo?.BillingPayments != null && Model.OrderModel.BillingInfo.BillingPayments.Any())
+                                    {
+                                        <div class="auto cell app-overflow-y-scroll">
+                                            @for (int i = 0; i < Model.OrderModel.BillingInfo.BillingPayments.Length; i++)
+                                            {
+                                                <div class="shrink cell grid-x app-grid-row">
+                                                    <div class="auto cell app-grid-row">@Model.OrderModel.BillingInfo.BillingPayments[i].Date.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.OrderModel.BillingInfo.BillingPayments[i].Amount)</div>
+
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="auto cell grid-y align-center">
+                                            <div class="shrink cell grid-x align-center">
+                                                <h6>No hay registros de pagos</h6>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="shrink cell grid-x bordered margin-right-1">
+                                    <div class="auto cell grid-x">
+                                        <div class="shrink cell grid-x align-right">
+                                            <div class="shrink cell grid-y align-center padding-top-1 padding-bottom-1 padding-left-1">@(Model.OrderModel.BillingInfo.BillingPayments != null && Model.OrderModel.BillingInfo.BillingPayments.Any() ? Model.OrderModel.BillingInfo.BillingPayments.Count().ToString() : "0" )&nbsp;registros</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="auto cell app-overflow-y-auto padding-0 tabs-panel" id="panelOrderHistorization">
+                            @if (Model.OrderModel.Historization != null && Model.OrderModel.Historization.Any())
+                            {
+                                for (int i = 0; i < Model.OrderModel.Historization.Length; i++)
+                                {
+                                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                                        <div class="font-bold">@Model.OrderModel.Historization[i].StatusDescription</div>
+                                        <div class="text-wrap">@Model.OrderModel.Historization[i].Date.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="auto cell app-overflow-y-auto padding-0 tabs-panel" id="panelBillingHistorization">
+                            @if (Model.OrderModel?.BillingInfo?.Historization != null && Model.OrderModel.BillingInfo.Historization.Any())
+                            {
+                                for (int i = 0; i < Model.OrderModel.BillingInfo.Historization.Length; i++)
+                                {
+                                    <div class="shrink cell grid-y app-border-bottom padding-1">
+                                        <div class="font-bold">@Model.OrderModel.BillingInfo.Historization[i].StatusDescription</div>
+                                        <div class="text-wrap">@Model.OrderModel.BillingInfo.Historization[i].Date.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="shrink cell grid-x align-right bordered padding-1 app-panel-data-margin-bottom">
+                <div class="app-padding-button-modal-right">
+                    <a asp-page="/Customers/Details" asp-route-id="@Model.OrderModel.CustomerInfo.CustomerId" class="button margin-0">Regresar a Cliente</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.OrderModel.OrderHeader.OrderStatusId == 1)
+    {
+        <div class="reveal" id="addPaymentModal" data-reveal>
+            <h3>Agregar pago.</h3>
+            <form class="grid-x app-border-bottom padding-top-1 padding-horizontal-1" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="small-12 cell">
+                    <input type="number" value="" asp-for="AddPaymentRequest.Amount" placeholder="Monto del pago" autocomplete="off" />
+                    <span asp-validation-for="AddPaymentRequest.Amount"></span>
+                </div>
+                <div class="small-6 cell app-padding-button-modal-left">
+                    <a href="javascript:;" class="button expanded" data-close aria-label="Close modal">Cancelar</a>
+                </div>
+                <div class="small-6 cell app-padding-button-modal-right">
+                    <input type="submit" class="button expanded" value="Guardar" />
+                </div>
+            </form>
+            <button class="close-button" data-close aria-label="Close modal" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        @if (Model.OrderModel.BillingInfo.TotalPaid == 0)
+        {
+            <div class="reveal" id="cancelOrderModal" data-reveal>
+                <h3>¿Esta seguro de cancelar la orden?</h3>
+                <form class="grid-x app-border-bottom padding-top-1 padding-horizontal-1" method="post" asp-page-handler="DeleteOrder">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="small-6 cell app-padding-button-modal-left">
+                        <a href="javascript:;" class="button expanded" data-close aria-label="Close modal">No</a>
+                    </div>
+                    <div class="small-6 cell app-padding-button-modal-right">
+                        <input type="submit" class="button expanded" value="Si" />
+                    </div>
+                </form>
+                <button class="close-button" data-close aria-label="Close modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+    }
+</div>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#addPaymentTriggerButton').on('click', function () {
+                //$('AddPaymentRequest.Amount').val('');
+            });
+        });
+    </script>
+}
+

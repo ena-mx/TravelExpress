@@ -4,13 +4,14 @@
     using System.Threading.Tasks;
     using TravelExpenses.SharedFramework;
     using TravelExpress.Domain.Customers.Shared;
+    using TravelExpress.Domain.UserHistorization;
     using TravelExpress.Enums.Customers;
 
     internal sealed class NewCustomerState : CustomerState
     {
         #region Constructor
 
-        public NewCustomerState(CustomerComponent customerComponent, CustomerStorageComponent customerStorage, CustomerHistorization customerHistorization, IDateComponent dateComponent) : base(customerComponent, customerStorage, customerHistorization, dateComponent)
+        public NewCustomerState(CustomerComponent customerComponent, CustomerStorageComponent customerStorage, CustomerHistorization customerHistorization, IDateComponent dateComponent, UserHistorizationComponent userHistorizationComponent) : base(customerComponent, customerStorage, customerHistorization, dateComponent, userHistorizationComponent)
         {
         }
 
@@ -29,7 +30,9 @@
 
             await _customerHistorization.AddCustomerActivity(_customerComponent.CustomerId, CustomerActivityType.CustomerCreated, _dateComponent.ServerDate, userId);
 
-            _customerComponent.State = new ExistingCustomerState(_customerComponent, _customerStorage, _customerHistorization, _dateComponent);
+            await _userHistorizationComponent.AddUserActivity(_customerComponent.CustomerId, Enums.UserHistorization.UserActivityType.CustomerCreated, _dateComponent.ServerDate, userId);
+
+            _customerComponent.State = new ExistingCustomerState(_customerComponent, _customerStorage, _customerHistorization, _dateComponent, _userHistorizationComponent);
 
             return _successWorkflowResult;
         }

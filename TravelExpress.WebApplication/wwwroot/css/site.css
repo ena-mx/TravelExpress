@@ -112,3 +112,7 @@
 .app-list-item-title {
     font-size: 25px !important;
 }
+
+.app-tabs-grid {
+    height: 100%;
+}

@@ -1,0 +1,179 @@
+﻿@page "{id:Guid}"
+@model TravelExpress.WebApplication.Pages.Excursions.ExcursionDetailModel
+@{
+    ViewData["Title"] = "ExcursionDetail";
+}
+
+<div class="auto cell grid-y padding-horizontal-1">
+    <div class="shrink cell grid-y padding-top-1">
+        <h3 class="font-bold">@Model.ExcursionModel.Description</h3>
+        <h4 class="subheader"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;@Model.ExcursionModel.BeginDate.ToString("dd/MMMM/yyyy") - @Model.ExcursionModel.EndDate.ToString("dd/MMMM/yyyy")</h4>
+    </div>
+    <div class="auto cell grid-x margin-bottom-1">
+        <div class="shrink cell grid-y bordered padding-top-1">
+            <div class="shrink cell app-border-bottom">
+                <h4 class="padding-horizontal-1">Lista de precios</h4>
+            </div>
+            <div class="auto cell padding-horizontal-1 padding-top-1 app-overflow-y-auto">
+                <ul class="no-bullet">
+                    @if (Model.ExcursionModel.PriceCategories != null && Model.ExcursionModel.PriceCategories.Any())
+                    {
+                        @for (int i = 0; i < Model.ExcursionModel.PriceCategories.Length; i++)
+                        {
+                            @if (Model.ExcursionModel.PriceCategories[i].PriceDetails != null && Model.ExcursionModel.PriceCategories[i].PriceDetails.Any())
+                            {
+                                <li>
+                                    @Model.ExcursionModel.PriceCategories[i].Description
+                                    <ul class="list-circle">
+                                        @for (int j = 0; j < Model.ExcursionModel.PriceCategories[i].PriceDetails.Length; j++)
+                                        {
+                                            <li>@Model.ExcursionModel.PriceCategories[i].PriceDetails[j].Description <span class="font-bold">@string.Format("{0:c}", Model.ExcursionModel.PriceCategories[i].PriceDetails[j].UnitPrice)</span></li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <li>No hay servicios adicionales</li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="shrink cell grid-y bordered padding-top-1 margin-left-1">
+            <div class="shrink cell app-border-bottom">
+                <h4 class="padding-horizontal-1">Servicios adicionales</h4>
+            </div>
+            <div class="auto cell padding-horizontal-1 padding-top-1 app-overflow-y-auto">
+                <ul>
+                    @if (Model.ExcursionModel.AditionalServices != null && Model.ExcursionModel.AditionalServices.Any())
+                    {
+                        @for (int i = 0; i < Model.ExcursionModel.AditionalServices.Length; i++)
+                        {
+                            <li>@Model.ExcursionModel.AditionalServices[i].Description <span class="font-bold">@string.Format("{0:c}", Model.ExcursionModel.AditionalServices[i].UnitPrice)</span></li>
+                        }
+                    }
+                    else
+                    {
+                        <li>No hay servicios adicionales</li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="auto cell grid-y bordered padding-top-1 margin-left-1">
+            <div class="shrink cell app-border-bottom">
+                <h4 class="padding-horizontal-1">Ordenes</h4>
+            </div>
+            <div class="auto cell grid-y padding-top-1">
+                <div class="shrink cell">
+                    <ul class="tabs" data-tabs id="excursion-details-tabs">
+                        <li class="tabs-title is-active"><a class="font-bold" data-tabs-target="panelActiveOrders" aria-selected="true">Ordenes Activas</a></li>
+                        <li class="tabs-title"><a class="font-bold" data-tabs-target="panelPayedOrders">Ordenes Pagadas</a></li>
+                    </ul>
+                </div>
+                <div class="auto cell grid-y">
+                    <div class="auto cell grid-y tabs-content" data-tabs-content="excursion-details-tabs">
+                        <div class="auto cell is-active padding-0 tabs-panel" id="panelActiveOrders">
+                            <div class="auto cell grid-y app-tabs-grid">
+                                <div class="shrink cell grid-x font-bold font-normal margin-right-1" style="margin-right: 1.2rem !important; border-top: 0.0625rem solid #cacaca; background: #1B75CF;">
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Cliente</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Fecha</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Total</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Pagado</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Adeudo</div>
+                                    <div class="shrink cell app-grid-row padding-top-1 padding-bottom-1"><i class="fa fa-gear fa-lg" style="color: white; padding-right: 1.25rem; padding-left: 1rem;"></i></div>
+                                </div>
+                                <div class="auto cell grid-y bordered">
+
+                                    @if (Model.ExcursionModel?.ActiveOrders != null && Model.ExcursionModel.ActiveOrders.Any())
+                                    {
+                                        <div class="auto cell app-overflow-y-scroll">
+                                            @for (int i = 0; i < Model.ExcursionModel.ActiveOrders.Length; i++)
+                                            {
+                                                <div class="shrink cell grid-x app-grid-row">
+                                                    <div class="auto cell app-grid-row">@Model.ExcursionModel.ActiveOrders[i].CustomerName</div>
+                                                    <div class="auto cell app-grid-row">@Model.ExcursionModel.ActiveOrders[i].OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.ExcursionModel.ActiveOrders[i].TotalAmount)</div>
+                                                    <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.ExcursionModel.ActiveOrders[i].TotalPaid)</div>
+                                                    <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.ExcursionModel.ActiveOrders[i].TotalDebit)</div>
+                                                    <div class="shrink cell app-grid-row grid-x align-right">
+                                                        <a asp-page="/Orders/OrderDetail" asp-route-id="@Model.ExcursionModel.ActiveOrders[i].OrderId" class="padding-right-1 padding-left-1"><i class="fa fa-folder-open fa-lg" style="color: #1B75CF;"></i></a>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="auto cell grid-y align-center">
+                                            <div class="shrink cell grid-x align-center">
+                                                <h6>No hay registros de pagos</h6>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="shrink cell grid-x bordered margin-right-1">
+                                    <div class="auto cell grid-x">
+                                        <div class="shrink cell grid-x align-right">
+                                            <div class="shrink cell grid-y align-center padding-top-1 padding-bottom-1 padding-left-1">@(Model.ExcursionModel.ActiveOrders != null && Model.ExcursionModel.ActiveOrders.Any() ? Model.ExcursionModel.ActiveOrders.Count().ToString() : "0" )&nbsp;registros</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="auto cell padding-0 tabs-panel" id="panelPayedOrders">
+                            <div class="auto cell grid-y app-tabs-grid">
+                                <div class="shrink cell grid-x font-bold font-normal margin-right-1" style="margin-right: 1.2rem !important; border-top: 0.0625rem solid #cacaca; background: #1B75CF;">
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Cliente</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Fecha</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Total</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Pagado</div>
+                                    <div class="auto cell app-grid-row padding-top-1 padding-bottom-1 text-center" style="color: white;">Adeudo</div>
+                                    <div class="shrink cell app-grid-row padding-top-1 padding-bottom-1"><i class="fa fa-gear fa-lg" style="color: white; padding-right: 1.25rem; padding-left: 1rem;"></i></div>
+                                </div>
+                                <div class="auto cell grid-y bordered">
+                                    @if (Model.ExcursionModel?.PayedOrders != null && Model.ExcursionModel.PayedOrders.Any())
+                                    {
+                                        <div class="auto cell app-overflow-y-scroll">
+                                            @for (int i = 0; i < Model.ExcursionModel.PayedOrders.Length; i++)
+                                            {
+                                                <div class="shrink cell grid-x app-grid-row">
+                                                    <div class="auto cell app-grid-row">@Model.ExcursionModel.PayedOrders[i].CustomerName</div>
+                                                    <div class="auto cell app-grid-row">@Model.ExcursionModel.PayedOrders[i].OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.ExcursionModel.PayedOrders[i].TotalAmount)</div>
+                                                    <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.ExcursionModel.PayedOrders[i].TotalPaid)</div>
+                                                    <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.ExcursionModel.PayedOrders[i].TotalDebit)</div>
+                                                    <div class="shrink cell app-grid-row grid-x align-right">
+                                                        <a asp-page="/Orders/OrderDetail" asp-route-id="@Model.ExcursionModel.PayedOrders[i].OrderId" class="padding-right-1 padding-left-1"><i class="fa fa-folder-open fa-lg" style="color: #1B75CF;"></i></a>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="auto cell grid-y align-center">
+                                            <div class="shrink cell grid-x align-center">
+                                                <h6>No hay registros de ordenes</h6>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="shrink cell grid-x bordered margin-right-1">
+                                    <div class="auto cell grid-x">
+                                        <div class="shrink cell grid-x align-right">
+                                            <div class="shrink cell grid-y align-center padding-top-1 padding-bottom-1 padding-left-1">@(Model.ExcursionModel.PayedOrders != null && Model.ExcursionModel.PayedOrders.Any() ? Model.ExcursionModel.PayedOrders.Count().ToString() : "0" )&nbsp;registros</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

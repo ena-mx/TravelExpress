@@ -79,13 +79,14 @@ namespace TravelExpress.Domain.Orders.Component
         }
 
         public async Task<WorkflowResult> CreateAsync(
-            Guid excursionId, 
-            KeyValuePair<int, int>[] aditionalServices, 
-            KeyValuePair<int, int>[] orderDetails, 
+            Guid excursionId,
+            KeyValuePair<int, int>[] aditionalServices,
+            KeyValuePair<int, int>[] orderDetails,
             Guid userId)
         {
             using (TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
+                Exception appException = null;
                 try
                 {
                     WorkflowResult workflowResult = await _decorated.CreateAsync(
@@ -103,13 +104,31 @@ namespace TravelExpress.Domain.Orders.Component
                 catch (Exception ex)
                 {
                     Transaction.Current.Rollback();
-                    int errorId = await _applicationLog.LogExceptionAsync(ex);
-                    return new WorkflowResult(
-                        new[] {
-                            Resources.Resource.InternalServerErrorMessage,
-                            string.Format(Resources.Resource.GeneratedErrorIdMessage, errorId)
-                        });
+                    if (ex != null)
+                        appException = ex;
                 }
+
+                int errorId = 0;
+
+                if (appException != null)
+                {
+                    errorId = await _applicationLog.LogExceptionAsync(appException);
+                }
+
+                if (errorId > 0)
+                {
+                    return new WorkflowResult(
+                            new[] {
+                                Resources.Resource.InternalServerErrorMessage,
+                                string.Format(Resources.Resource.GeneratedErrorIdMessage, errorId)
+                            });
+                }
+
+                return new WorkflowResult(
+                            new[] {
+                                Resources.Resource.InternalServerErrorMessage
+                            });
+
             }
         }
     }

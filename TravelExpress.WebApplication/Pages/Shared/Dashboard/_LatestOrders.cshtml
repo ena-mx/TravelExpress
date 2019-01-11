@@ -1,0 +1,26 @@
+﻿@model TravelExpress.Queries.Analytics.LatestOrderModel[]
+
+<div class="margin-top-1">
+    <h3 class="subheader">Últimas Ordenes</h3>
+    <div class="flex-container align-stretch overflow-x-scroll">
+        @if (Model != null && Model.Any())
+        {
+            @for (int i = 0; i < Model.Length; i++)
+            {
+                <div class="shrink cell grid-y align-justify bordered padding-1 margin-right-1 margin-bottom-1" style="width: 200px;">
+                    <div class="grid-y margin-bottom-1">
+                        <div class="subheader h4"><a asp-page="/Orders/OrderDetail" asp-route-id="@Model[i].OrderId">@Model[i].ExcursionDescription</a></div>
+                        <div class="grid-x align-justify">
+                            <div style="font-size: small;">Excursion:</div>
+                            <div><span class="font-italic" style="font-size: small;">@Model[i].ExcursionDate.ToString("dd/MMMM/yyyy")</span></div>
+                        </div>
+                        <div class="grid-x align-justify">
+                            <div style="font-size: small;">Orden:</div>
+                            <div><span class="font-italic" style="font-size: small;">@Model[i].OrderDate.ToString("dd/MMMM/yyyy")</span></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

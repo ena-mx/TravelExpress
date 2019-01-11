@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using TravelExpenses.SharedFramework;
     using TravelExpress.Domain.Customers.Shared;
+    using TravelExpress.Domain.UserHistorization;
 
     public sealed class CustomerComponent : ICustomerComponent
     {
@@ -24,7 +25,8 @@
         public CustomerComponent(
             CustomerStorageComponent customerStorage,
             CustomerHistorization customerHistorization,
-            IDateComponent dateComponent)
+            IDateComponent dateComponent,
+            UserHistorizationComponent userHistorizationComponent)
         {
             if (customerStorage == null)
             {
@@ -41,15 +43,21 @@
                 throw new ArgumentNullException(nameof(dateComponent));
             }
 
+            if (userHistorizationComponent == null)
+            {
+                throw new ArgumentNullException(nameof(userHistorizationComponent));
+            }
+
             _customerId = Guid.NewGuid();
-            State = new NewCustomerState(this, customerStorage, customerHistorization, dateComponent);
+            State = new NewCustomerState(this, customerStorage, customerHistorization, dateComponent, userHistorizationComponent);
         }
 
         public CustomerComponent(
             Guid customerId,
             CustomerStorageComponent customerStorage,
             CustomerHistorization customerHistorization,
-            IDateComponent dateComponent)
+            IDateComponent dateComponent,
+            UserHistorizationComponent userHistorizationComponent)
         {
             if (customerStorage == null)
             {
@@ -66,8 +74,13 @@
                 throw new ArgumentNullException(nameof(dateComponent));
             }
 
+            if (userHistorizationComponent == null)
+            {
+                throw new ArgumentNullException(nameof(userHistorizationComponent));
+            }
+
             _customerId = customerId;
-            State = new ExistingCustomerState(this, customerStorage, customerHistorization, dateComponent);
+            State = new ExistingCustomerState(this, customerStorage, customerHistorization, dateComponent, userHistorizationComponent);
         }
 
         #endregion Constructor

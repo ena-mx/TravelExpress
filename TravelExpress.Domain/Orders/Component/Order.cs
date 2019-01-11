@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using TravelExpenses.SharedFramework;
     using TravelExpress.Domain.Orders.State;
+    using TravelExpress.Domain.UserHistorization;
 
     public sealed class Order : IOrder
     {
@@ -22,7 +23,8 @@
             Guid customerId,
             OrderHistorization orderHistorization, 
             OrderStorage orderStorage,
-            IDateComponent dateComponent)
+            IDateComponent dateComponent,
+            UserHistorizationComponent userHistorizationComponent)
         {
             if (orderHistorization == null)
             {
@@ -39,10 +41,15 @@
                 throw new ArgumentNullException(nameof(dateComponent));
             }
 
+            if (userHistorizationComponent == null)
+            {
+                throw new ArgumentNullException(nameof(userHistorizationComponent));
+            }
+
             _orderId = Guid.NewGuid();
             _billId = Guid.NewGuid();
             _customerId = customerId;
-            OrderState = new OrderOpenState(this, orderHistorization, orderStorage, dateComponent);
+            OrderState = new OrderOpenState(this, orderHistorization, orderStorage, dateComponent, userHistorizationComponent);
         }
 
         public Order(
@@ -51,7 +58,8 @@
             Guid customerId,
             OrderHistorization orderHistorization,
             OrderStorage orderStorage,
-            IDateComponent dateComponent)
+            IDateComponent dateComponent,
+            UserHistorizationComponent userHistorizationComponent)
         {
             if (orderHistorization == null)
             {
@@ -68,10 +76,15 @@
                 throw new ArgumentNullException(nameof(dateComponent));
             }
 
+            if (userHistorizationComponent == null)
+            {
+                throw new ArgumentNullException(nameof(userHistorizationComponent));
+            }
+
             _orderId = orderId;
             _billId = billId;
             _customerId = customerId;
-            OrderState = new OrderConfirmedState(this, orderHistorization, orderStorage, dateComponent);
+            OrderState = new OrderConfirmedState(this, orderHistorization, orderStorage, dateComponent, userHistorizationComponent);
         }
 
         public Order(

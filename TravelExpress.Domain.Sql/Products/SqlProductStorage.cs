@@ -126,7 +126,7 @@
 			FROM [travel].[PriceCategory] WITH(NOLOCK)
 			JOIN [catalogs].[ProductPriceCategory] WITH(NOLOCK) ON [ProductPriceCategory].[Description] = [PriceCategory].[Description]
 			JOIN [catalogs].[ProductPriceDetail] WITH(NOLOCK) ON [ProductPriceDetail].[ProductPriceCategoryId] =  [ProductPriceCategory].[ProductPriceCategoryId]
-			WHERE [travel].[PriceCategory].[ExcursionId] = @excursionId
+			WHERE [travel].[PriceCategory].[ExcursionId] = @excursionId AND [ProductPriceCategory].[ProductId] = @productId
         ";
 
         private static readonly string _duplicateExcursionCmdTxt = @"

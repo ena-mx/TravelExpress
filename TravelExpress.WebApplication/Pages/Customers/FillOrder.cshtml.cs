@@ -1,36 +1,13 @@
 ﻿namespace TravelExpress.WebApplication.Pages.Customers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;
+    using TravelExpenses.SharedFramework;
+    using TravelExpress.Domain.Orders.Component;
+    using TravelExpress.Entities.Orders;
     using TravelExpress.Queries.Customers;
     using TravelExpress.Queries.Products;
-
-
-    public class AditionalServicesRequest
-    {
-        [Required]
-        public int AditionalServiceId { get; set; }
-        [Required]
-        public int Quantity { get; set; }
-    }
-
-    public class PriceDetailRequest
-    {
-        [Required]
-        public int PriceDetailId { get; set; }
-        [Required]
-        public int Quantity { get; set; }
-    }
-
-    public class FillOrderRequest
-    {
-        public List<AditionalServicesRequest> AditionalServices { get; set; }
-        public List<PriceDetailRequest> PriceDetails { get; set; }
-    }
 
     public class FillOrderModel : BasePageModel
     {
@@ -45,6 +22,7 @@
         public FillOrderRequest FillOrderRequest { get; set; }
 
         public Customer Customer { get; set; }
+
         public ExcursionDetail ExcursionDetail { get; set; }
 
         public FillOrderModel(CustomersQueryComponent customersQueryComponent, ProductQueryComponent productQueryComponent)
@@ -53,26 +31,7 @@
             _productQueryComponent = productQueryComponent ?? throw new ArgumentNullException(nameof(productQueryComponent));
         }
 
-
-        public async Task<ActionResult> OnGetAsync(Guid customerId, Guid excursionId)
-        {
-            if(customerId == Guid.Empty || excursionId == Guid.Empty)
-                return RedirectToPage("/NotFound");
-
-            CustomerId = customerId;
-            ExcursionId = excursionId;
-
-            Customer = await _customersQueryComponent.CustomerAsync(CustomerId);
-
-            ExcursionDetail = await _productQueryComponent.ExcursionItemAsync(ExcursionId);
-
-            if(Customer == null || ExcursionDetail == null)
-                return RedirectToPage("/NotFound");
-
-            return Page();
-        }
-
-        public async Task<ActionResult> OnPostAsync()
+        private async Task<ActionResult> LoadViewModelAsync(RedirectToPageResult redirectToPageResult = null)
         {
             if (CustomerId == Guid.Empty || ExcursionId == Guid.Empty)
                 return RedirectToPage("/NotFound");
@@ -81,14 +40,58 @@
 
             ExcursionDetail = await _productQueryComponent.ExcursionItemAsync(ExcursionId);
 
-            if (!ModelState.IsValid)
-                return Page();
-
             if (Customer == null || ExcursionDetail == null)
                 return RedirectToPage("/NotFound");
+
+            if (redirectToPageResult != null)
+                return redirectToPageResult;
 
             return Page();
         }
 
+        public async Task<ActionResult> OnGetAsync(Guid customerId, Guid excursionId)
+        {
+            CustomerId = customerId;
+            ExcursionId = excursionId;
+
+            return await LoadViewModelAsync();
+        }
+
+        public async Task<ActionResult> OnPostAsync([FromServices]OrderFactory orderFactory)
+        {
+            if (orderFactory == null)
+            {
+                throw new ArgumentNullException(nameof(orderFactory));
+            }
+
+            ModelState.Clear();
+
+            if (FillOrderRequest == null)
+            {
+                ModelState.TryAddModelError("", Resources.Resource.FillOrderMissingDetailsError);
+                return await LoadViewModelAsync();
+            }
+
+            IOrder order = orderFactory.NewOrder(CustomerId);
+
+            WorkflowResult result = await order.CreateAsync(
+                    ExcursionId,
+                    FillOrderRequest.ValidAditionalServices,
+                    FillOrderRequest.ValidPriceDetails,
+                    UserId()
+                );
+
+            if (!result.Success)
+            {
+                for (int i = 0; i < result.Errors.Length; i++)
+                {
+                    ModelState.TryAddModelError("", result.Errors[i]);
+                }
+
+                return await LoadViewModelAsync();
+            }
+
+            return await LoadViewModelAsync(RedirectToPage("/Orders/OrderDetail", new { id = order.OrderId }));
+        }
     }
 }

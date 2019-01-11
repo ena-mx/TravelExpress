@@ -1,0 +1,38 @@
+﻿@model TravelExpress.Queries.Analytics.UserActivityModel[]
+<div class="auto cell grid-y">
+    <div class="shrink cell app-border-bottom">
+        <h3 class="subheader padding-horizontal-1">Actividad Clientes</h3>
+    </div>
+    <div class="auto cell app-overflow-y-auto">
+        @if (Model != null && Model.Any())
+        {
+            @for (int i = 0; i < Model.Length; i++)
+            {
+                <div class="shrink cell grid-y app-border-bottom">
+                    <div class="shrink cell grid-y padding-1">
+                        @if (Model[i].UserActivityModuleId == 1)
+                        {
+                            <div class="font-bold">
+                                <a asp-page="/Customers/Details" asp-route-id="@Model[i].Id">@Model[i].Description&nbsp;<code>@Model[i].UserActivityModuleDescription</code></a>
+                            </div>
+                        }
+                        else if (Model[i].UserActivityModuleId == 2)
+                        {
+                            <div class="font-bold">
+                                <a asp-page="/Orders/OrderDetail" asp-route-id="@Model[i].Id">@Model[i].Description&nbsp;<code>@Model[i].UserActivityModuleDescription</code></a>
+                            </div>
+                        }
+                        <div class="text-wrap">@Model[i].Date.ToString("dd/MMMM/yyyy hh:mm tt")</div>
+                        <div class="text-wrap">@Model[i].UserName</div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="shrink cell grid-y app-border-bottom padding-1">
+                <div class="font-bold">No hay registro de Actividades</div>
+            </div>
+        }
+    </div>
+</div>

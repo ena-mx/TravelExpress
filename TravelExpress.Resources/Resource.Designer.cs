@@ -169,6 +169,33 @@ namespace TravelExpress.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Revise la captura de datos para generar la orden..
+        /// </summary>
+        public static string FillOrderMissingDetailsError {
+            get {
+                return ResourceManager.GetString("FillOrderMissingDetailsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Los servicios adicionales son incorrectos..
+        /// </summary>
+        public static string FillOrderNoAditionalServicesError {
+            get {
+                return ResourceManager.GetString("FillOrderNoAditionalServicesError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Por favor capture detalles de orden..
+        /// </summary>
+        public static string FillOrderNoPriceDetailsError {
+            get {
+                return ResourceManager.GetString("FillOrderNoPriceDetailsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Id de error: {0}.
         /// </summary>
         public static string GeneratedErrorIdMessage {

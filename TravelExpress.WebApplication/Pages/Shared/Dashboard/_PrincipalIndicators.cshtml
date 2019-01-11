@@ -1,0 +1,15 @@
+﻿@model TravelExpress.Queries.Analytics.AnalyticsModel
+
+<div class="shrink cell margin-top-1 app-border-bottom">
+    <h3 class="subheader margin-left-1">Dashboard</h3>
+    <div class="flex-container align-stretch margin-left-1">
+        <div class="auto cell grid-y align-justify bordered padding-1 margin-right-1 margin-bottom-1" style="height:150px">
+            <div>Excursiones Activas</div>
+            <div class="stat text-right">@Model.ActiveExcursions</div>
+        </div>
+        <div class="auto cell grid-y align-justify bordered padding-1 margin-right-1 margin-bottom-1" style="height:150px">
+            <div>Pagos Atrasados</div>
+            <div class="stat text-right">@Model.OrderDelayPaymentsQuantity</div>
+        </div>
+    </div>
+</div>

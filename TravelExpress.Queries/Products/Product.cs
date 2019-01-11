@@ -8,7 +8,7 @@
     {
         public abstract Task<GenericPage<ProductIndex>> ProductsAsync(int offset, int limit);
         public abstract Task<Product> ProductAsync(Guid productId);
-        public abstract Task<ProductExcursionIndex[]> ProductExcursionsAsync();
+        public abstract Task<ProductExcursionIndex[]> ProductExcursionsAsync(DateTime date);
         public abstract Task<ExcursionDetail> ExcursionItemAsync(Guid excursionId);
     }
 

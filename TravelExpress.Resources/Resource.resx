@@ -231,4 +231,13 @@
   <data name="OrderHasPaymentsError" xml:space="preserve">
     <value>La order ya genero ordén de pago y no se puede cancelar.</value>
   </data>
+  <data name="FillOrderMissingDetailsError" xml:space="preserve">
+    <value>Revise la captura de datos para generar la orden.</value>
+  </data>
+  <data name="FillOrderNoPriceDetailsError" xml:space="preserve">
+    <value>Por favor capture detalles de orden.</value>
+  </data>
+  <data name="FillOrderNoAditionalServicesError" xml:space="preserve">
+    <value>Los servicios adicionales son incorrectos.</value>
+  </data>
 </root>

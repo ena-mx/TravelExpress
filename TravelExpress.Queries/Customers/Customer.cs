@@ -10,5 +10,7 @@
         public CustomerHistorization[] Historization { get; set; }
         public CustomerPhoneCall[] Phonecalls { get; set; }
         public CustomerObservation[] Observations { get; set; }
+        public OrderIndex[] ConfirmedOrders { get; set; }
+        public OrderIndex[] HistoricOrders { get; set; }
     }
 }

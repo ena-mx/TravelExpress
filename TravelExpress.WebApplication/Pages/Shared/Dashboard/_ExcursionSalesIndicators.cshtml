@@ -1,0 +1,27 @@
+﻿@model TravelExpress.Queries.Analytics.ExcursionSalesIndicator[]
+
+<div class="margin-top-1">
+    <h3 class="subheader">Ventas</h3>
+    <div class="flex-container align-stretch overflow-x-scroll">
+        @if (Model != null && Model.Any())
+        {
+            @for (int i = 0; i < Model.Length; i++)
+            {
+                <div class="shrink cell grid-y align-justify bordered padding-1 margin-right-1 margin-bottom-1" style="width: 200px;">
+                    <div class="grid-y margin-bottom-1">
+                        <div class="subheader h4"><a asp-page="/Excursions/ExcursionDetail" asp-route-id="@Model[i].ExcursionId">@Model[i].Description</a></div>
+                        <div class="grid-x align-justify">
+                            <div style="font-size: small;">Inicio:</div>
+                            <div><span class="font-italic" style="font-size: small;">@Model[i].BeginDate.ToString("dd/MMMM/yyyy")</span></div>
+                        </div>
+                        <div class="grid-x align-justify">
+                            <div style="font-size: small;">Fin:</div>
+                            <div><span class="font-italic" style="font-size: small;">@Model[i].EndDate.ToString("dd/MMMM/yyyy")</span></div>
+                        </div>
+                    </div>
+                    <div class="stat text-right">@Model[i].Quantity</div>
+                </div>
+            }
+        }
+    </div>
+</div>

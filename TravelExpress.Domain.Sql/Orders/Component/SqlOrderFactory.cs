@@ -11,6 +11,7 @@
     using TravelExpress.Domain.Orders;
     using TravelExpress.Domain.Orders.Component;
     using TravelExpress.Domain.Orders.State;
+    using TravelExpress.Domain.Sql.UserHistorization;
     using TravelExpress.Enums.Orders;
 
     public sealed class SqlOrderFactory : OrderFactory
@@ -59,7 +60,8 @@
                             customerId,
                             _orderHistorization,
                             _orderStorage,
-                            _dateComponent),
+                            _dateComponent,
+                            new SqlUserHistorizationComponent()),
                         _applicationLog);
         }
 
@@ -77,6 +79,7 @@
             bool exists = Convert.ToBoolean(await commandHelper.ExecuteScalarAsync(_existsOrder, false, parameters));
 
             commandHelper = null;
+            parameters = null;
 
             if (!exists)
                 return Option<IOrder>.None();
@@ -89,6 +92,14 @@
             {
                 using (SqlCommand command = new SqlCommand(_orderInfoCmdText, connection))
                 {
+                    parameters = new SqlParameter[1]
+                    {
+                        new SqlParameter("@orderId", System.Data.SqlDbType.UniqueIdentifier)
+                        {
+                            Value = orderId
+                        }
+                    };
+
                     command.Parameters.AddRange(parameters);
 
                     await connection.OpenAsync();
@@ -119,7 +130,8 @@
                                 customerId,
                                 _orderHistorization,
                                 _orderStorage,
-                                _dateComponent),
+                                _dateComponent,
+                                new SqlUserHistorizationComponent()),
                             _applicationLog));
                     }
                 case OrderStatus.Payed:

@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using TravelExpenses.SharedFramework;
     using TravelExpress.Domain.Customers.Shared;
+    using TravelExpress.Domain.UserHistorization;
 
     internal abstract class CustomerState
     {
@@ -13,6 +14,7 @@
         protected readonly CustomerStorageComponent _customerStorage;
         protected readonly CustomerHistorization _customerHistorization;
         protected readonly IDateComponent _dateComponent;
+        protected readonly UserHistorizationComponent _userHistorizationComponent;
         protected static readonly WorkflowResult _invalidOperationError = new WorkflowResult(Resources.Resource.InvalidOperation);
         protected readonly WorkflowResult _successWorkflowResult = new WorkflowResult();
         protected readonly WorkflowResult _errorSavingCustomerInStorage = new WorkflowResult(Resources.Resource.NewCustomerComponent_ErrorSavingCustomerInStorage);
@@ -26,12 +28,14 @@
             CustomerComponent customerComponent,
             CustomerStorageComponent customerStorage,
             CustomerHistorization customerHistorization,
-            IDateComponent dateComponent)
+            IDateComponent dateComponent,
+            UserHistorizationComponent userHistorizationComponent)
         {
             _customerComponent = customerComponent ?? throw new ArgumentNullException(nameof(customerComponent));
             _customerStorage = customerStorage ?? throw new ArgumentNullException(nameof(customerStorage));
             _customerHistorization = customerHistorization ?? throw new ArgumentNullException(nameof(customerHistorization));
             _dateComponent = dateComponent ?? throw new ArgumentNullException(nameof(dateComponent));
+            _userHistorizationComponent = userHistorizationComponent ?? throw new ArgumentNullException(nameof(userHistorizationComponent));
         }
 
         #endregion Constructor

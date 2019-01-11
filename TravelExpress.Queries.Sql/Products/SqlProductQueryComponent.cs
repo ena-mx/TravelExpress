@@ -51,13 +51,19 @@
             }
         }
 
-        public override async Task<ProductExcursionIndex[]> ProductExcursionsAsync()
+        public override async Task<ProductExcursionIndex[]> ProductExcursionsAsync(DateTime date)
         {
             using (SqlDeserializerComponent<ProductExcursionIndex[]> component = new SqlDeserializerComponent<ProductExcursionIndex[]>(
                _connectionString,
                _cmdTxtProductExcursions,
                "ProductExcursionCollection",
-               Array.Empty<SqlParameter>()))
+               new SqlParameter[1]
+               {
+                    new SqlParameter("@date", System.Data.SqlDbType.SmallDateTime)
+                    {
+                        Value = date
+                    }
+               }))
             {
                 return await component.ExecuteStoreProcedureAndDeserialize();
             }

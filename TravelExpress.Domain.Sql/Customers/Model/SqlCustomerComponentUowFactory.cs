@@ -9,6 +9,7 @@
     using TravelExpenses.SharedFramework;
     using TravelExpress.Domain.Customers.Model;
     using TravelExpress.Domain.Sql.Customers.Shared;
+    using TravelExpress.Domain.Sql.UserHistorization;
 
     public sealed class SqlCustomerComponentUowFactory : CustomerComponentUowFactory
     {
@@ -45,7 +46,8 @@
                             customerId,
                             new SqlCustomersStorage(),
                            new SqlCustomerHistorization(),
-                           new CstMexDateComponent()
+                           new CstMexDateComponent(),
+                           new SqlUserHistorizationComponent()
                     )));
         }
 
@@ -55,7 +57,8 @@
                         new CustomerComponent(
                             new SqlCustomersStorage(),
                            new SqlCustomerHistorization(),
-                           new CstMexDateComponent()
+                           new CstMexDateComponent(),
+                           new SqlUserHistorizationComponent()
                     ));
         }
     }

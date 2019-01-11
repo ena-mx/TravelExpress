@@ -1,0 +1,22 @@
+﻿@model TravelExpress.Queries.Analytics.LatestCustomers[]
+
+<div class="margin-top-1">
+    <h3 class="subheader">Nuevos clientes</h3>
+    <div class="flex-container align-stretch overflow-x-scroll">
+        @if (Model != null && Model.Any())
+        {
+            @for (int i = 0; i < Model.Length; i++)
+            {
+                <div class="shrink cell grid-y align-justify bordered padding-1 margin-right-1 margin-bottom-1" style="width: 200px;">
+                    <div class="grid-y margin-bottom-1">
+                        <div class="subheader h4"><a asp-page="/Customers/Details" asp-route-id="@Model[i].CustomerId">@Model[i].Name</a></div>
+                        <div class="grid-x align-justify">
+                            <div style="font-size: small;">Fecha:</div>
+                            <div><span class="font-italic" style="font-size: small;">@Model[i].CreatedDate.ToString("dd/MMMM/yyyy")</span></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
