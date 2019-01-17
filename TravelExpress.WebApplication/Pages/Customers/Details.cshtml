@@ -108,9 +108,9 @@
                                             {
                                                 <div class="shrink cell grid-x app-grid-row">
                                                     <div class="auto cell app-grid-row">@Model.Customer.ConfirmedOrders[i].ExcursionDescription</div>
-                                                    <div class="auto cell app-grid-row">@Model.Customer.ConfirmedOrders[i].ExcursionBeginDate.ToString("dd/MMMM/yyyy")</div>
-                                                    <div class="auto cell app-grid-row">@Model.Customer.ConfirmedOrders[i].ExcursionEndDate.ToString("dd/MMMM/yyyy")</div>
-                                                    <div class="auto cell app-grid-row">@Model.Customer.ConfirmedOrders[i].OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row text-right">@Model.Customer.ConfirmedOrders[i].ExcursionBeginDate.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row text-right">@Model.Customer.ConfirmedOrders[i].ExcursionEndDate.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row text-right">@Model.Customer.ConfirmedOrders[i].OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
                                                     <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.Customer.ConfirmedOrders[i].TotalAmount)</div>
                                                     <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.Customer.ConfirmedOrders[i].TotalPaid)</div>
                                                     <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.Customer.ConfirmedOrders[i].TotalDebit)</div>
@@ -162,9 +162,9 @@
                                             {
                                             <div class="shrink cell grid-x app-grid-row">
                                                 <div class="auto cell app-grid-row">@Model.Customer.HistoricOrders[i].ExcursionDescription</div>
-                                                <div class="auto cell app-grid-row">@Model.Customer.HistoricOrders[i].ExcursionBeginDate.ToString("dd/MMMM/yyyy")</div>
-                                                <div class="auto cell app-grid-row">@Model.Customer.HistoricOrders[i].ExcursionEndDate.ToString("dd/MMMM/yyyy")</div>
-                                                <div class="auto cell app-grid-row">@Model.Customer.HistoricOrders[i].OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
+                                                <div class="auto cell app-grid-row text-right">@Model.Customer.HistoricOrders[i].ExcursionBeginDate.ToString("dd/MMMM/yyyy")</div>
+                                                <div class="auto cell app-grid-row text-right">@Model.Customer.HistoricOrders[i].ExcursionEndDate.ToString("dd/MMMM/yyyy")</div>
+                                                <div class="auto cell app-grid-row text-right">@Model.Customer.HistoricOrders[i].OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
                                                 <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.Customer.HistoricOrders[i].TotalAmount)</div>
                                                 <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.Customer.HistoricOrders[i].TotalPaid)</div>
                                                 <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.Customer.HistoricOrders[i].TotalDebit)</div>

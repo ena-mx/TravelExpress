@@ -14,6 +14,9 @@
             <li><a asp-page="/Catalogs/Add"><i class="fa fa-plus fa-lg" style="padding-right: 1rem;"></i>Nuevo</a></li>
         </ul>
     </li>
+    <li>
+        <a asp-page="/Excursions/Index"><i class="fa fa-suitcase fa-lg" style="padding-right: 1rem;"></i>Excursiones</a>
+    </li>
     @if (User.Identity.IsAuthenticated)
     {
         <li><a asp-area="" asp-controller="Account" asp-action="SignOut"><i class="fa fa-sign-out fa-lg" style="padding-right: 1rem;"></i>Cerrar Sesión</a></li>

@@ -88,10 +88,10 @@
                 <div class="shrink cell grid-y">
                     <div class="shrink cell grid-x">
                         <div class="auto cell app-grid-row font-bold font-italic">@Model.OrderModel.OrderHeader.StatusDescription</div>
-                        <div class="auto cell app-grid-row">@Model.OrderModel.OrderHeader.OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
-                        <div class="auto cell app-grid-row">@Model.OrderModel.OrderHeader.ExcursionDescription</div>
-                        <div class="auto cell app-grid-row">@Model.OrderModel.OrderHeader.ExcursionBeginDate.ToString("dd/MMMM/yyyy")</div>
-                        <div class="auto cell app-grid-row">@Model.OrderModel.OrderHeader.ExcursionEndDate.ToString("dd/MMMM/yyyy")</div>
+                        <div class="auto cell app-grid-row text-right">@Model.OrderModel.OrderHeader.OrderCreatedDate.ToString("dd/MMMM/yyyy")</div>
+                        <div class="auto cell app-grid-row text-center">@Model.OrderModel.OrderHeader.ExcursionDescription</div>
+                        <div class="auto cell app-grid-row text-right">@Model.OrderModel.OrderHeader.ExcursionBeginDate.ToString("dd/MMMM/yyyy")</div>
+                        <div class="auto cell app-grid-row text-right">@Model.OrderModel.OrderHeader.ExcursionEndDate.ToString("dd/MMMM/yyyy")</div>
                         <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.OrderModel.BillingInfo.TotalAmount)</div>
                         <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.OrderModel.BillingInfo.TotalPaid)</div>
                         <div class="auto cell app-grid-row text-right font-bold">@string.Format("{0:c}", Model.OrderModel.BillingInfo.TotalDebit)</div>
@@ -166,7 +166,7 @@
                                             @for (int i = 0; i < Model.OrderModel.BillingInfo.BillingPayments.Length; i++)
                                             {
                                                 <div class="shrink cell grid-x app-grid-row">
-                                                    <div class="auto cell app-grid-row">@Model.OrderModel.BillingInfo.BillingPayments[i].Date.ToString("dd/MMMM/yyyy")</div>
+                                                    <div class="auto cell app-grid-row text-right">@Model.OrderModel.BillingInfo.BillingPayments[i].Date.ToString("dd/MMMM/yyyy")</div>
                                                     <div class="auto cell app-grid-row text-right">@string.Format("{0:c}", Model.OrderModel.BillingInfo.BillingPayments[i].Amount)</div>
 
                                                 </div>

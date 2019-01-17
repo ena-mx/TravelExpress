@@ -4,5 +4,232 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<form asp-page="./Index" method="get" class="auto cell grid-y">
+    <div class="shrink cell padding-left-1 padding-right-1 padding-top-1">
+        <h2>Excursiones</h2>
+    </div>
+    <div id="gridView" class="auto cell grid-y margin-left-1 margin-right-1">
+        <div class="shrink cell grid-x">
+            <div class="auto cell grid-y align-center">
+                <input id="search" name="search" asp-for="SearchValue" type="search" placeholder="Buscar por nombre" autocomplete="off" />
+            </div>
+            <div class="shrink cell grid-y align-center">
+                <input type="submit" class="button" value="@Resources.Resource.Grid_SearchButtonLabel" asp-route-pageIndex="1" asp-route-pageLimit="@(Model.Limit)" />
+            </div>
+        </div>
+        <div class="auto cell grid-y app-grid-margin-right">
+            <div class="shrink cell">
+                <h4>Resultados</h4>
+            </div>
+            <div class="auto cell grid-y">
+                <div class="shrink cell grid-x font-bold font-normal margin-right-1" style="margin-right: 1.2rem !important; border-top: 0.0625rem solid #cacaca; background: #1B75CF;">
+                    <div class="auto cell bordered padding-top-1 padding-bottom-1 text-center" style="color: white;">Excursión</div>
+                    <div class="auto cell bordered padding-top-1 padding-bottom-1 text-center" style="color: white;">Fecha Inicio</div>
+                    <div class="auto cell bordered padding-top-1 padding-bottom-1 text-center" style="color: white;">Fecha Fin</div>
+                    <div class="auto cell bordered padding-top-1 padding-bottom-1 text-center" style="color: white;">Ordenes sin pagar</div>
+                    <div class="auto cell bordered padding-top-1 padding-bottom-1 text-center" style="color: white;">Ordenes pagadas</div>
+                    <div class="auto cell bordered padding-top-1 padding-bottom-1 text-center" style="color: white;">Estatus</div>
+                    <div class="shrink cell bordered padding-top-1 padding-bottom-1"><i class="fa fa-gear fa-lg" style="color: white; padding-right: 1.25rem; padding-left: 1rem;"></i></div>
+                </div>
+                <div class="auto cell grid-y bordered">
 
+                    @if (Model.ExcursionsPage.Items != null && Model.ExcursionsPage.Items.Any())
+                    {
+                        <div class="auto cell app-overflow-y-scroll">
+                            @for (int i = 0; i < Model.ExcursionsPage.Items.Length; i++)
+                            {
+                            <div class="shrink cell grid-x app-grid-row">
+                                <div class="auto cell app-grid-row">@Model.ExcursionsPage.Items[i].Description</div>
+                                <div class="auto cell app-grid-row text-right">@Model.ExcursionsPage.Items[i].EndDate.ToString("dd/MMMM/yyyy")</div>
+                                <div class="auto cell app-grid-row text-right">@Model.ExcursionsPage.Items[i].BeginDate.ToString("dd/MMMM/yyyy")</div>
+                                <div class="auto cell app-grid-row text-right font-bold">@Model.ExcursionsPage.Items[i].ActiveOrdersCount</div>
+                                <div class="auto cell app-grid-row text-right font-bold">@Model.ExcursionsPage.Items[i].PayedOrdersCount</div>
+                                <div class="auto cell app-grid-row text-right font-bold">@(Model.ExcursionsPage.Items[i].BeginDate > Model.ServerDate ? "Activa" : "Historico" )</div>
+                                <div class="shrink cell app-grid-row grid-x align-right">
+                                    <a asp-page="./ExcursionDetail" asp-route-id="@Model.ExcursionsPage.Items[i].ExcursionId" class="padding-right-1 padding-left-1"><i class="fa fa-folder-open fa-lg" style="color: #1B75CF;"></i></a>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="auto cell grid-y align-center">
+                            <div class="shrink cell grid-x align-center">
+                                <h6>No hay registros en la pagina actual</h6>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="shrink cell grid-x bordered margin-right-1">
+                    <div class="auto cell grid-x">
+                        <div class="auto cell grid-x align-left padding-top-1">
+                            <div class="grid-y align-center">
+                                <nav aria-label="Pagination">
+                                    <ul class="pagination" role="navigation" aria-label="Pagination">
+                                        @if (Model.ExcursionsPage.HasPreviousPage)
+                                        {
+                                            <li class="pagination-previous app-cursor-pointer">
+                                                <a asp-page="./Index"
+                                                   asp-route-pageIndex="@(Model.ExcursionsPage.PageInfo.PageNumber - 1)"
+                                                   asp-route-pageLimit="@(Model.Limit)"
+                                                   asp-route-search="@Model.SearchValue"
+                                                   aria-label="@Resources.Resource.Grid_PreviousPageLabel">@Resources.Resource.Grid_PreviousPageLabel</a>
+                                            </li>
+                                            <li>
+                                                <a asp-page="./Index"
+                                                   asp-route-pageIndex="1"
+                                                   asp-route-pageLimit="@(Model.Limit)"
+                                                   asp-route-search="@Model.SearchValue"
+                                                   aria-label="@Resources.Resource.Grid_FirstPageLabel">1</a>
+                                            </li>
+                                            <li class="ellipsis" aria-hidden="true"></li>
+                                        }
+                                        else
+                                        {
+                                            <li class="disabled">@Resources.Resource.Grid_PreviousPageLabel&nbsp;<span class="show-for-sr">@Resources.Resource.Grid_PreviousPageLabel</span></li>
+                                        }
+                                        <li class="current"><span class="show-for-sr">@Resources.Resource.Grid_YouAreOnPageLabel @Model.ExcursionsPage.PageInfo.PageNumber</span>@Model.ExcursionsPage.PageInfo.PageNumber</li>
+                                        @{
+                                            var pageNumber = Model.ExcursionsPage.PageInfo.PageNumber + 1;
+                                            var displayPageCount = Model.ExcursionsPage.PageInfo.PageNumber + 3;
+                                            var lastDisplayPageNumber = displayPageCount;
+
+                                            if (Model.ExcursionsPage.HasNextPage)
+                                            {
+                                                while (pageNumber <= displayPageCount)
+                                                {
+                                                    if (pageNumber <= Model.ExcursionsPage.PageInfo.TotalPages)
+                                                    {
+                                                        <li>
+                                                            <a asp-page="./Index"
+                                                               asp-route-pageIndex="@(pageNumber)"
+                                                               asp-route-pageLimit="@(Model.Limit)"
+                                                               asp-route-search="@Model.SearchValue"
+                                                               aria-label="@Resources.Resource.Grid_PageLabel @(pageNumber)">@(pageNumber)</a>
+                                                        </li>
+                                                        pageNumber++;
+                                                    }
+                                                    else
+                                                    {
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        @if (Model.ExcursionsPage.PageInfo.TotalPages > displayPageCount)
+                                        {
+                                            pageNumber = Model.ExcursionsPage.PageInfo.TotalPages - 3;
+                                            displayPageCount = Model.ExcursionsPage.PageInfo.TotalPages - 1;
+                                            <li class="ellipsis" aria-hidden="true"></li>
+                                            while (pageNumber <= displayPageCount)
+                                            {
+                                                if (pageNumber > lastDisplayPageNumber)
+                                                {
+                                                    <li>
+                                                        <a asp-page="./Index"
+                                                           asp-route-pageIndex="@(pageNumber)"
+                                                           asp-route-pageLimit="@(Model.Limit)"
+                                                           asp-route-search="@Model.SearchValue"
+                                                           aria-label="@Resources.Resource.Grid_PageLabel @(pageNumber)">@(pageNumber)</a>
+                                                    </li>
+                                                    pageNumber++;
+                                                }
+                                                else
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                            <li>
+                                                <a asp-page="./Index"
+                                                   asp-route-pageIndex="@Model.ExcursionsPage.PageInfo.TotalPages"
+                                                   asp-route-pageLimit="@(Model.Limit)"
+                                                   asp-route-search="@Model.SearchValue"
+                                                   aria-label="@Resources.Resource.Grid_PageLabel @Model.ExcursionsPage.PageInfo.TotalPages">@Model.ExcursionsPage.PageInfo.TotalPages</a>
+                                            </li>
+                                        }
+                                        @if (Model.ExcursionsPage.HasNextPage)
+                                        {
+                                            <li>
+                                                <a asp-page="./Index"
+                                                   asp-route-pageIndex="@(Model.ExcursionsPage.PageInfo.PageNumber + 1)"
+                                                   asp-route-pageLimit="@(Model.Limit)"
+                                                   asp-route-search="@Model.SearchValue"
+                                                   aria-label="@Resources.Resource.Grid_NextPageLabel">@Resources.Resource.Grid_NextPageLabel</a>
+                                            </li>
+
+                                        }
+                                        else
+                                        {
+                                            <li class="pagination-next disabled">@Resources.Resource.Grid_NextPageLabel&nbsp;<span class="show-for-sr">@Resources.Resource.Grid_NextPageLabel</span></li>
+                                        }
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="shrink cell grid-x align-right">
+                            <div class="shrink cell grid-y align-center padding-top-1 padding-bottom-1 padding-left-1">@Resources.Resource.Grid_PageLabel @Model.ExcursionsPage.PageInfo.PageNumber @Resources.Resource.Grid_PageNumberOfLabel @Model.ExcursionsPage.PageInfo.TotalPages.</div>
+                            <div class="shrink cell grid-y align-center padding-top-1 padding-bottom-1 padding-left-1">@Resources.Resource.Grid_DisplayingLabel @(Model.Offset + Model.ExcursionsPage.PageInfo.PageSize) @Resources.Resource.Grid_PageNumberOfLabel @Model.ExcursionsPage.PageInfo.TotalItems @Resources.Resource.Grid_RowsLabel</div>
+                            <div class="shrink cell grid-y align-center padding-horizontal-1">
+                                <select id="limitSelect" class="margin-0" asp-items="Model.PageLimitItems"></select>
+                                <div style="display:none;">
+                                    @if (Model.Limit != 10)
+                                    {
+                                        <a asp-page="./Index"
+                                           asp-route-pageIndex="1"
+                                           asp-route-pageLimit="10"
+                                           asp-route-search="@Model.SearchValue"
+                                           id="limit10"
+                                           aria-label="@Resources.Resource.Grid_TenRows">@Resources.Resource.Grid_TenRows</a>
+                                    }
+                                    @if (Model.Limit != 20)
+                                    {
+                                        <a asp-page="./Index"
+                                           asp-route-pageIndex="1"
+                                           asp-route-pageLimit="20"
+                                           asp-route-search="@Model.SearchValue"
+                                           id="limit20"
+                                           aria-label="@Resources.Resource.Grid_TenRows">@Resources.Resource.Grid_TwentyRows</a>
+                                    }
+                                    @if (Model.Limit != 30)
+                                    {
+                                        <a asp-page="./Index"
+                                           asp-route-pageIndex="1"
+                                           asp-route-pageLimit="30"
+                                           asp-route-search="@Model.SearchValue"
+                                           id="limit30"
+                                           aria-label="@Resources.Resource.Grid_TenRows">@Resources.Resource.Grid_ThirtyRows</a>
+                                    }
+                                    @if (Model.Limit != 40)
+                                    {
+                                        <a asp-page="./Index"
+                                           asp-route-pageIndex="1"
+                                           asp-route-pageLimit="50"
+                                           asp-route-search="@Model.SearchValue"
+                                           id="limit50"
+                                           aria-label="@Resources.Resource.Grid_TenRows">@Resources.Resource.Grid_FiftyRows</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        (function () {
+            $('#limitSelect').on('change', function () {
+                var val = $(this).val();
+                var selector = document.getElementById('limit' + val);
+                if (selector) {
+                    selector.click();
+                }
+            });
+        })();
+    </script>
+}

@@ -79,7 +79,7 @@
                                             {
                                                 <li>
                                                     <a href="javascript:;">
-                                                        @Model.ExcursionDetail.PriceCategories[i].PriceDetails[j].Description
+                                                        @Model.ExcursionDetail.PriceCategories[i].PriceDetails[j].Description @string.Format("{0:c}", Model.ExcursionDetail.PriceCategories[i].PriceDetails[j].UnitPrice)
                                                         <input type="number" asp-for="FillOrderRequest.PriceDetails[excursionDetailCounter].Quantity" value="0" />
                                                         <input type="hidden" asp-for="FillOrderRequest.PriceDetails[excursionDetailCounter].PriceDetailId" value="@Model.ExcursionDetail.PriceCategories[i].PriceDetails[j].PriceDetailId" />
                                                     </a>
